@@ -86,7 +86,7 @@ legend,label.l{font-weight:700;padding:0;margin-bottom:2px;display:block}
 input[type=text],input[type=tel],input[type=email],input[type=number],select,textarea{
   width:100%;font:inherit;color:var(--ink);background:var(--bg);border:1.5px solid var(--line);border-radius:9px;padding:11px 12px;min-height:46px}
 textarea{min-height:76px;resize:vertical}
-.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}.row.three{grid-template-columns:1fr 1fr 1fr}
 .seg{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
 .seg label,.checks label{position:relative;cursor:pointer}
 .seg input,.checks input{position:absolute;opacity:0;inset:0;width:100%;height:100%;margin:0;cursor:pointer}
@@ -127,30 +127,30 @@ footer{color:var(--muted);font-size:.85rem;padding-bottom:calc(30px + env(safe-a
 <main class="wrap">
   <section>
     <p class="eyebrow">The day</p>
-    <h2>Doors open 11am. Out, or on the clean-up crew, by 11pm.</h2>
-    <p class="lede" id="intro">Come when it suits and leave when it suits. Tell us roughly when, so we know how many to feed and when.</p>
+    <h2>Doors open 11am. By 11pm you're either gone or holding a mop.</h2>
+    <p class="lede" id="intro">Rock up when you like, bugger off when you like. Just tell us when, so we don't cook for forty and feed twelve.</p>
     <div>
       <div class="rail" id="rail" aria-hidden="true"></div>
       <div class="rail-x" id="railx" aria-hidden="true"></div>
     </div>
-    <p class="hint" id="railNote">People in the house each hour, from the RSVPs so far.</p>
+    <p class="hint" id="railNote">Bodies in the house, hour by hour. This is how we decide when to hide the good cheese.</p>
   </section>
 
   <section>
     <p class="eyebrow">Food and drink</p>
-    <h2>What we're putting on, and what to bring</h2>
+    <h2>Who's feeding who</h2>
     <div class="facts">
-      <div class="fact"><h3>Food we provide</h3><div data-set="we_provide_food"></div></div>
-      <div class="fact"><h3>Drinks we provide</h3><div data-set="we_provide_drinks"></div></div>
-      <div class="fact"><h3>Please bring</h3><div data-set="please_bring"></div></div>
-      <div class="fact" id="neededFact"><h3>Still needed</h3><div data-set="still_needed"></div></div>
+      <div class="fact"><h3>Food we've got covered</h3><div data-set="we_provide_food"></div></div>
+      <div class="fact"><h3>Booze we've got covered</h3><div data-set="we_provide_drinks"></div></div>
+      <div class="fact"><h3>Your job</h3><div data-set="please_bring"></div></div>
+      <div class="fact" id="neededFact"><h3>Gaps. Someone be a hero.</h3><div data-set="still_needed"></div></div>
     </div>
   </section>
 
   <section>
     <div class="santa">
       <p class="eyebrow" style="color:var(--gold)">Gift game</p>
-      <h3>Bastard Santa <span class="price">$20</span></h3>
+      <h3>Bastard Santa. <span class="price">$20.</span> No mercy.</h3>
       <div data-set="santa"></div>
       <p id="santaCount" class="hint" style="color:inherit;opacity:.8"></p>
     </div>
@@ -158,8 +158,8 @@ footer{color:var(--muted);font-size:.85rem;padding-bottom:calc(30px + env(safe-a
 
   <section id="rsvp">
     <p class="eyebrow">RSVP</p>
-    <h2 id="rsvpTitle">Are you coming?</h2>
-    <p class="lede" id="rsvpLede">One reply per household. You can come back and change it any time.</p>
+    <h2 id="rsvpTitle">Are you in or what?</h2>
+    <p class="lede" id="rsvpLede">One reply per household. Change your mind as often as you like. We'll judge quietly.</p>
     <div class="done" id="done" hidden>
       <h3 id="doneTitle">Saved</h3>
       <p id="doneText"></p>
@@ -168,77 +168,81 @@ footer{color:var(--muted);font-size:.85rem;padding-bottom:calc(30px + env(safe-a
       <div class="copy"><input type="text" id="editLink" readonly aria-label="Your edit link"><button class="btn ghost" type="button" id="copyBtn">Copy</button></div>
     </div>
     <form id="f" novalidate>
-      <fieldset><legend>Coming?</legend>
+      <fieldset><legend>Well?</legend>
         <div class="seg">
-          <label><input type="radio" name="coming" value="yes" id="c_yes" checked><span>Yes</span></label>
-          <label><input type="radio" name="coming" value="maybe" id="c_maybe"><span>Maybe</span></label>
+          <label><input type="radio" name="coming" value="yes" id="c_yes" checked><span>Hell yes</span></label>
+          <label><input type="radio" name="coming" value="maybe" id="c_maybe"><span>Dunno yet</span></label>
           <label><input type="radio" name="coming" value="no" id="c_no"><span>Can't</span></label>
         </div>
       </fieldset>
-      <div><label class="l" for="name">Your name</label><input type="text" id="name" maxlength="60" autocomplete="name" required></div>
+      <div><label class="l" for="name">Your full name</label><p class="hint">The one your mum uses when you're in trouble.</p><input type="text" id="name" maxlength="60" autocomplete="name" required></div>
       <div class="row">
         <div><label class="l" for="phone">Mobile</label><input type="tel" id="phone" maxlength="20" autocomplete="tel" inputmode="tel" required></div>
         <div><label class="l" for="email">Email</label><input type="email" id="email" maxlength="100" autocomplete="email"></div>
       </div>
-      <p class="hint">Phone and email go to the hosts only. They are never shown on this page.</p>
+      <p class="hint">Mobile and email go to the hosts only and are never shown on this page. They're for the "where the hell are you" text.</p>
       <input class="hp" type="text" id="website" tabindex="-1" autocomplete="off" aria-hidden="true">
 
       <div id="details" style="display:contents">
-        <div class="row">
+        <div class="row three">
           <div><label class="l" for="adults">Adults</label><input type="number" id="adults" min="0" max="20" value="1" inputmode="numeric"></div>
           <div><label class="l" for="kids">Kids</label><input type="number" id="kids" min="0" max="20" value="0" inputmode="numeric"></div>
+          <div><label class="l" for="dogs">Dogs</label><input type="number" id="dogs" min="0" max="20" value="0" inputmode="numeric"></div>
         </div>
-        <div><label class="l" for="who">Who's in your group?</label><input type="text" id="who" maxlength="200" placeholder="Names, so we can set places"></div>
+        <p class="hint">"Adult" is used loosely. Dogs are welcome and will be judged less than you.</p>
+        <div><label class="l" for="who">Full names of every human coming</label><textarea id="who" maxlength="300" placeholder="First and last name, one per line. Yes, including you."></textarea></div>
+        <div id="dogBox" hidden><label class="l" for="dog_names">Dog names</label><input type="text" id="dog_names" maxlength="120" placeholder="Essential information"></div>
         <div class="row">
-          <div><label class="l" for="arrive">Arriving</label><select id="arrive"></select></div>
-          <div><label class="l" for="leave">Leaving</label><select id="leave"></select></div>
+          <div><label class="l" for="arrive">Rocking up</label><select id="arrive"></select></div>
+          <div><label class="l" for="leave">Buggering off</label><select id="leave"></select></div>
         </div>
         <fieldset><legend>What are you bringing?</legend>
           <select id="bring_type" aria-label="Type of dish">
             <option value="">Choose a type</option><option>Nibbles / starters</option><option>Meat / seafood</option><option>Salad / side</option><option>Dessert</option><option>Drinks / ice</option><option>Something else</option><option>Tell me what's needed</option>
           </select>
           <input type="text" id="bringing" maxlength="200" placeholder="e.g. prawns, pavlova, potato bake" aria-label="What you are bringing">
-          <p class="hint">Check the list below first so we don't end up with six potato salads.</p>
+          <p class="hint">Check the list below first. Six potato salads is a cry for help.</p>
         </fieldset>
-        <fieldset><legend>What will you be drinking?</legend>
+        <fieldset><legend>What's your poison?</legend>
           <div class="checks" id="drinks"></div>
           <input type="text" id="drinks_other" maxlength="120" placeholder="Anything specific" aria-label="Other drinks">
         </fieldset>
-        <fieldset><legend>Dietaries</legend>
+        <fieldset><legend>Dietaries, allergies, things that will kill you</legend>
           <div class="checks" id="dietary"></div>
-          <input type="text" id="dietary_detail" maxlength="300" placeholder="Who it applies to, allergies, anything else" aria-label="Dietary details">
+          <input type="text" id="dietary_detail" maxlength="300" placeholder="Who, what, and how dead" aria-label="Dietary details">
         </fieldset>
-        <div><label class="l" for="santa">Bastard Santa: how many of you are playing?</label>
+        <div><label class="l" for="santa">Bastard Santa: how many of you are brave enough?</label>
           <input type="number" id="santa" min="0" max="20" value="0" inputmode="numeric">
           <p class="hint">Each player brings one wrapped gift worth about $20.</p></div>
+        <div><label class="l" for="tunes">Tunes you demand</label><textarea id="tunes" maxlength="400" placeholder="Song and artist, as many as you like. We keep the list. We make no promises."></textarea></div>
       </div>
-      <div><label class="l" for="notes">Anything else we should know?</label><textarea id="notes" maxlength="500"></textarea></div>
+      <div><label class="l" for="notes">Anything else? Confessions, warnings, feuds to seat apart</label><textarea id="notes" maxlength="500"></textarea></div>
       <p class="msg" id="msg" role="status"></p>
-      <button class="btn" type="submit" id="submitBtn">Send RSVP</button>
+      <button class="btn" type="submit" id="submitBtn">Lock it in</button>
     </form>
   </section>
 
   <section>
     <p class="eyebrow">So far</p>
-    <h2>Who's coming</h2>
+    <h2>The damage so far</h2>
     <div class="totals" id="totals"></div>
     <ul class="list" id="guestList"></ul>
   </section>
 
   <section>
     <p class="eyebrow">The table</p>
-    <h2>What's being brought</h2>
+    <h2>What's hitting the table</h2>
     <ul class="list" id="foodList"></ul>
-    <h3>Dietaries to cook around</h3>
+    <h3>Things that will hurt someone</h3>
     <div class="tags" id="dietTags"></div>
-    <h3>Drinks people want</h3>
+    <h3>The drinks order</h3>
     <div class="tags" id="drinkTags"></div>
   </section>
 
   <section id="music">
     <p class="eyebrow">Music</p>
-    <h2>Request a song, vote on the rest</h2>
-    <p class="lede">Most votes gets played first. <span data-set="playlist_url" data-link="Open the playlist"></span></p>
+    <h2>Fight over the music</h2>
+    <p class="lede">Add a song. Vote for the good ones. Most votes plays first. Democracy, sadly. <span data-set="playlist_url" data-link="Open the playlist"></span></p>
     <form class="songform" id="sf" novalidate>
       <input type="text" id="s_title" maxlength="80" placeholder="Song" aria-label="Song title" required>
       <input type="text" id="s_artist" maxlength="80" placeholder="Artist" aria-label="Artist">
@@ -251,7 +255,7 @@ footer{color:var(--muted);font-size:.85rem;padding-bottom:calc(30px + env(safe-a
   <section>
     <p class="eyebrow">Getting here</p>
     <div class="facts">
-      <div class="fact"><h3>Address</h3><p id="addrLine" class="tbc">Shown after you RSVP.</p></div>
+      <div class="fact"><h3>Address</h3><p id="addrLine" class="tbc">You get the address after you RSVP. Nice try.</p></div>
       <div class="fact"><h3>Parking</h3><div data-set="parking"></div></div>
       <div class="fact"><h3>Good to know</h3><div data-set="notes"></div></div>
       <div class="fact"><h3>Questions</h3><div data-set="contact"></div></div>
@@ -262,12 +266,12 @@ footer{color:var(--muted);font-size:.85rem;padding-bottom:calc(30px + env(safe-a
 
 <script>
 /* Paste the Apps Script web-app URL here. Empty = preview mode (this device only). */
-const API_URL = '';
+const API_URL = 'https://script.google.com/macros/s/AKfycbwdqHbJlayajrL1QbkIQzSeHGSJXEn01jP4-y_2WIkoEBlhe_41dVdjdS-f1WOBacJR/exec';
 
 const DEFAULTS = {
   date:'2026-12-25', hosts:'Jono & Charlotte', rsvp_by:'',
   intro:'', we_provide_food:'', we_provide_drinks:'', please_bring:'', still_needed:'',
-  santa:'Optional. Each player brings one wrapped gift worth about $20. Draw a number, then unwrap a new gift or steal one that is already open.',
+  santa:'Bring one wrapped gift worth about twenty bucks. Draw a number. Unwrap something new, or steal the thing someone else already loves.\nFriendships will be tested. Crying is permitted. Regifting last year\'s candle is not.',
   parking:'', notes:'', contact:'', playlist_url:''
 };
 const DRINKS = ['Beer','White wine','Red wine','Bubbles','Cider','Spirits / cocktails','Non-alcoholic beer or wine','Soft drink / juice','Water'];
@@ -305,7 +309,7 @@ function mock(b) {
   const rows = Object.values(d.guests), tally = k => { const t = {}; rows.filter(g => g.coming !== 'no').forEach(g => String(g[k] || '').split(', ').filter(Boolean).forEach(x => t[x] = (t[x] || 0) + 1)); return t; };
   return {
     settings:{}, mine:d.guests[b.token] || null, address:'',
-    guests:rows.map(g => ({ name:g.name, coming:g.coming, adults:g.adults, kids:g.kids, arrive:g.arrive, leave:g.leave, bring_type:g.bring_type, bringing:g.bringing, santa:g.santa })),
+    guests:rows.map(g => ({ name:g.name, coming:g.coming, adults:g.adults, kids:g.kids, dogs:g.dogs, arrive:g.arrive, leave:g.leave, bring_type:g.bring_type, bringing:g.bringing, santa:g.santa })),
     diets:tally('dietary'), drinks:tally('drinks'),
     songs:d.songs.map(s => ({ id:s.id, title:s.title, artist:s.artist, by:s.by, votes:s.voters.length, voted:s.voters.includes(b.token) }))
   };
@@ -316,7 +320,7 @@ function setBlock(node, text) {
   node.replaceChildren();
   const lines = String(text || '').split('\n').map(s => s.trim()).filter(Boolean);
   if (node.dataset.link) { if (lines[0] && /^https:\/\//.test(lines[0])) node.append(el('a', { href:lines[0], target:'_blank', rel:'noopener', textContent:node.dataset.link })); return; }
-  if (!lines.length) node.append(el('p', { className:'tbc', textContent:'Details to come.' }));
+  if (!lines.length) node.append(el('p', { className:'tbc', textContent:'Still arguing about this. Check back.' }));
   else if (lines.length === 1) node.append(el('p', { textContent:lines[0] }));
   else node.append(el('ul', null, ...lines.map(l => el('li', { textContent:l }))));
 }
@@ -326,14 +330,14 @@ function render(st) {
   document.querySelectorAll('[data-set]').forEach(n => setBlock(n, s[n.dataset.set]));
   $('#neededFact').hidden = !s.still_needed;
   if (s.intro) $('#intro').textContent = s.intro;
-  $('#hostsLine').textContent = s.hosts ? 'Hosted by ' + s.hosts : "You're invited";
+  $('#hostsLine').textContent = s.hosts ? 'Hosted by ' + s.hosts + '. Send help.' : "You're invited";
   const dl = fmtDate(s.date, { weekday:'long', day:'numeric', month:'long', year:'numeric' });
   $('#whenLine').textContent = (dl ? dl + ' · ' : '') + '11am till 11pm';
   const chips = $('#chips'); chips.replaceChildren();
   const days = Math.ceil((new Date(s.date + 'T00:00:00') - new Date()) / 864e5);
   if (days > 0) chips.append(el('span', { className:'chip', textContent:days + (days === 1 ? ' sleep to go' : ' sleeps to go') }));
   if (s.rsvp_by) chips.append(el('span', { className:'chip', textContent:'RSVP by ' + fmtDate(s.rsvp_by, { weekday:'short', day:'numeric', month:'short' }) }));
-  chips.append(el('span', { className:'chip', textContent:'Bastard Santa $20' }));
+  chips.append(el('span', { className:'chip', textContent:'Bastard Santa $20' }), el('span', { className:'chip', textContent:'Dogs welcome' }));
   $('#foot').textContent = 'Bevson Christmas ' + (s.date || '').slice(0, 4) + '. Replies go straight to ' + (s.hosts || 'the hosts') + '.';
 
   const yes = st.guests.filter(g => g.coming === 'yes'), maybe = st.guests.filter(g => g.coming === 'maybe');
@@ -341,9 +345,10 @@ function render(st) {
   const tot = $('#totals'); tot.replaceChildren(
     el('div', null, el('b', { textContent:n(yes, 'adults') }), 'adults'),
     el('div', null, el('b', { textContent:n(yes, 'kids') }), 'kids'),
-    el('div', null, el('b', { textContent:n(maybe, 'adults') + n(maybe, 'kids') }), 'maybe'));
+    el('div', null, el('b', { textContent:n(yes, 'dogs') }), 'dogs'),
+    el('div', null, el('b', { textContent:n(maybe, 'adults') + n(maybe, 'kids') }), 'on the fence'));
   const santaN = n(yes.concat(maybe), 'santa');
-  $('#santaCount').textContent = santaN ? santaN + ' playing so far.' : '';
+  $('#santaCount').textContent = santaN ? santaN + (santaN === 1 ? ' bastard' : ' bastards') + ' in so far.' : '';
 
   // hourly headcount 11am-11pm
   const rail = $('#rail'), rx = $('#railx'); rail.replaceChildren(); rx.replaceChildren();
@@ -358,21 +363,21 @@ function render(st) {
     const size = (+g.adults || 0) + (+g.kids || 0);
     const t = [g.arrive ? hourLabel(parseInt(g.arrive)) : '', g.leave ? hourLabel(parseInt(g.leave)) : ''].filter(Boolean).join(' to ');
     const left = el('span', null, g.name + (size > 1 ? ' +' + (size - 1) : '') + ' ');
-    if (g.coming === 'maybe') left.append(el('span', { className:'pill maybe', textContent:'Maybe' }));
+    if (g.coming === 'maybe') left.append(el('span', { className:'pill maybe', textContent:'Dunno' }));
     gl.append(el('li', null, left, el('small', { textContent:t })));
   });
-  if (!gl.children.length) gl.append(el('li', { className:'empty', textContent:'No replies yet. Be the first.' }));
+  if (!gl.children.length) gl.append(el('li', { className:'empty', textContent:'Nobody yet. Be the first, you legend.' }));
 
   const fl = $('#foodList'); fl.replaceChildren();
   yes.concat(maybe).filter(g => g.bringing || g.bring_type).forEach(g =>
     fl.append(el('li', null, el('span', null, (g.bringing || g.bring_type) + ' ', g.bringing && g.bring_type ? el('span', { className:'pill', textContent:g.bring_type }) : ''), el('small', { textContent:g.name }))));
-  if (!fl.children.length) fl.append(el('li', { className:'empty', textContent:'Nothing claimed yet.' }));
+  if (!fl.children.length) fl.append(el('li', { className:'empty', textContent:'Nothing claimed. We will all starve.' }));
 
   const tags = (node, obj, none) => { node.replaceChildren(); const ks = Object.keys(obj || {}).sort((a, b) => obj[b] - obj[a]);
     ks.forEach(k => node.append(el('span', { className:'tag' }, k + ' ', el('b', { textContent:'×' + obj[k] }))));
     if (!ks.length) node.append(el('span', { className:'empty', textContent:none })); };
-  tags($('#dietTags'), st.diets, 'None listed yet.');
-  tags($('#drinkTags'), st.drinks, 'No orders yet.');
+  tags($('#dietTags'), st.diets, 'Nobody has admitted to anything yet.');
+  tags($('#drinkTags'), st.drinks, 'Suspiciously sober so far.');
 
   const sl = $('#songList'); sl.replaceChildren();
   st.songs.slice().sort((a, b) => b.votes - a.votes).forEach(s2 => {
@@ -381,7 +386,7 @@ function render(st) {
     b.onclick = async () => { b.disabled = true; try { render(await api({ action:'vote', id:s2.id })); } catch (e) { b.disabled = false; $('#smsg').textContent = 'Vote did not save. Try again.'; } };
     sl.append(el('div', { className:'song' }, el('div', null, s2.title, el('small', { textContent:[s2.artist, s2.by ? 'from ' + s2.by : ''].filter(Boolean).join(' · ') })), b));
   });
-  if (!st.songs.length) sl.append(el('p', { className:'empty', textContent:'No requests yet.' }));
+  if (!st.songs.length) sl.append(el('p', { className:'empty', textContent:'Silence. Someone put something on.' }));
 
   if (st.address) { $('#addrLine').textContent = st.address; $('#addrLine').className = ''; $('#doneAddr').textContent = 'Address: ' + st.address; $('#doneAddr').hidden = false; }
   if (st.mine && !filled) fill(st.mine);
@@ -392,23 +397,26 @@ let filled = false;
 const checks = (id, items) => items.forEach((x, i) => $('#' + id).append(el('label', null, el('input', { type:'checkbox', value:x, id:id + '_' + i }), el('span', { textContent:x }))));
 checks('drinks', DRINKS); checks('dietary', DIETS);
 for (let h = 11; h <= 20; h++) $('#arrive').append(el('option', { value:h + ':00', textContent:hourLabel(h) }));
-$('#leave').append(el('option', { value:'', textContent:'Not sure yet' }));
+$('#leave').append(el('option', { value:'', textContent:'When I get kicked out' }));
 for (let h = 13; h <= 22; h++) $('#leave').append(el('option', { value:h + ':00', textContent:hourLabel(h) }));
-$('#leave').append(el('option', { value:'23:00', textContent:"11pm, I'm on clean-up" }));
+$('#leave').append(el('option', { value:'23:00', textContent:'11pm. Hand me the mop.' }));
 
 const coming = () => document.querySelector('input[name=coming]:checked').value;
 const syncComing = () => { $('#details').hidden = coming() === 'no'; $('#details').style.display = coming() === 'no' ? 'none' : 'contents'; };
 document.querySelectorAll('input[name=coming]').forEach(r => r.onchange = syncComing);
+const syncDogs = () => { $('#dogBox').hidden = !(+$('#dogs').value > 0); };
+$('#dogs').oninput = syncDogs;
 const picked = id => [...document.querySelectorAll('#' + id + ' input:checked')].map(i => i.value);
 
 function fill(m) {
   filled = true;
   const r = $('#c_' + m.coming); if (r) r.checked = true;
-  ['name','phone','email','adults','kids','who','arrive','leave','bring_type','bringing','dietary_detail','santa','notes'].forEach(k => { if (m[k] != null && $('#' + k)) $('#' + k).value = m[k]; });
+  ['name','phone','email','adults','kids','dogs','dog_names','tunes','arrive','leave','bring_type','bringing','dietary_detail','santa','notes'].forEach(k => { if (m[k] != null && $('#' + k)) $('#' + k).value = m[k]; });
   const setChecks = (id, list, str) => { const have = String(str || '').split(', ').filter(Boolean); document.querySelectorAll('#' + id + ' input').forEach(i => i.checked = have.includes(i.value)); return have.filter(x => !list.includes(x)).join(', '); };
   $('#drinks_other').value = setChecks('drinks', DRINKS, m.drinks);
   setChecks('dietary', DIETS, m.dietary);
-  syncComing();
+  $('#who').value = String(m.who || '').split('; ').join('\n');
+  syncComing(); syncDogs();
   $('#rsvpTitle').textContent = 'Your reply';
   $('#rsvpLede').textContent = 'This is what we have for you. Change anything and save again.';
   $('#submitBtn').textContent = 'Update RSVP'; $('#heroBtn').textContent = 'Change my RSVP';
@@ -421,14 +429,15 @@ $('#f').onsubmit = async e => {
   e.preventDefault();
   const msg = $('#msg'); msg.className = 'msg err';
   const v = id => $('#' + id).value.trim();
-  if (!v('name')) { msg.textContent = 'Add your name.'; $('#name').focus(); return; }
+  if (!/\S+\s+\S+/.test(v('name'))) { msg.textContent = 'Full name, first and last. We are not psychic.'; $('#name').focus(); return; }
   if (v('phone').replace(/\D/g, '').length < 8) { msg.textContent = 'Add a mobile number so we can reach you on the day.'; $('#phone').focus(); return; }
   if (v('email') && !/^\S+@\S+\.\S+$/.test(v('email'))) { msg.textContent = 'That email does not look right.'; $('#email').focus(); return; }
   const c = coming(), going = c !== 'no';
-  if (going && (+v('adults') || 0) + (+v('kids') || 0) < 1) { msg.textContent = 'How many of you are coming?'; $('#adults').focus(); return; }
-  if (going && v('leave') && parseInt(v('leave')) <= parseInt(v('arrive'))) { msg.textContent = 'Leaving time is before arriving time.'; $('#leave').focus(); return; }
+  if (going && (+v('adults') || 0) + (+v('kids') || 0) < 1) { msg.textContent = 'How many of you are coming? Zero is not a group.'; $('#adults').focus(); return; }
+  if (going && !$('#who').value.trim()) { msg.textContent = 'List the full name of every human coming. Including you.'; $('#who').focus(); return; }
+  if (going && v('leave') && parseInt(v('leave')) <= parseInt(v('arrive'))) { msg.textContent = 'You are leaving before you arrive. Bold, but no.'; $('#leave').focus(); return; }
   const data = { name:v('name'), coming:c, phone:v('phone'), email:v('email'), notes:v('notes'),
-    adults:going ? +v('adults') || 0 : 0, kids:going ? +v('kids') || 0 : 0, who:going ? v('who') : '',
+    adults:going ? +v('adults') || 0 : 0, kids:going ? +v('kids') || 0 : 0, dogs:going ? +v('dogs') || 0 : 0, who:going ? $('#who').value.trim().split(/\n+/).map(x => x.trim()).filter(Boolean).join('; ') : '', dog_names:going ? v('dog_names') : '', tunes:v('tunes'),
     arrive:going ? v('arrive') : '', leave:going ? v('leave') : '', bring_type:going ? v('bring_type') : '', bringing:going ? v('bringing') : '',
     drinks:going ? picked('drinks').concat(v('drinks_other') ? [v('drinks_other').replace(/, /g, ' ')] : []).join(', ') : '',
     dietary:going ? picked('dietary').join(', ') : '', dietary_detail:going ? v('dietary_detail') : '', santa:going ? +v('santa') || 0 : 0 };
@@ -437,8 +446,8 @@ $('#f').onsubmit = async e => {
     filled = true;
     render(await api({ action:'rsvp', data, website:$('#website').value }));
     msg.textContent = '';
-    $('#doneTitle').textContent = c === 'yes' ? "You're in" : c === 'maybe' ? 'Pencilled in' : 'Sorry you can\'t make it';
-    $('#doneText').textContent = c === 'no' ? 'Thanks for letting us know.' : 'Saved. Come back any time to change times, food or numbers.';
+    $('#doneTitle').textContent = c === 'yes' ? "You're in. No backing out." : c === 'maybe' ? 'Pencilled in. Commit, coward.' : 'Your loss. More prawns for us.';
+    $('#doneText').textContent = c === 'no' ? 'Noted. You will be talked about.' : 'Saved. Come back any time to change times, food or numbers.';
     $('#done').hidden = false; showLink(); btn.textContent = 'Update RSVP'; $('#heroBtn').textContent = 'Change my RSVP';
     $('#done').scrollIntoView({ behavior:'smooth', block:'center' });
   } catch (err) { msg.className = 'msg err'; msg.textContent = 'That did not save (' + err.message + '). Check your connection and try again.'; }

@@ -3,9 +3,9 @@
  * 1. Run setup() once. 2. Deploy > New deployment > Web app, execute as Me, access Anyone.
  * Tabs: Settings (edit to change the site), Guests (replies), Songs, Summary.
  */
-const G = ['updated','name','coming','adults','kids','who','phone','email','arrive','leave','bring_type','bringing','drinks','dietary','dietary_detail','santa','notes','token'];
-const NUM = { adults:1, kids:1, santa:1 };
-const MAXLEN = { name:60, who:200, phone:20, email:100, bring_type:40, bringing:200, drinks:300, dietary:200, dietary_detail:300, notes:500 };
+const G = ['updated','name','coming','adults','kids','dogs','who','dog_names','phone','email','arrive','leave','bring_type','bringing','drinks','dietary','dietary_detail','santa','tunes','notes','token'];
+const NUM = { adults:1, kids:1, dogs:1, santa:1 };
+const MAXLEN = { name:60, who:300, dog_names:120, tunes:400, phone:20, email:100, bring_type:40, bringing:200, drinks:300, dietary:200, dietary_detail:300, notes:500 };
 const PRIVATE_SETTINGS = ['address'];
 
 function setup() {
@@ -26,7 +26,7 @@ function setup() {
     ['we_provide_drinks', '', 'One item per line'],
     ['please_bring', '', 'One item per line'],
     ['still_needed', '', 'Gaps you want filled. Blank hides it'],
-    ['santa', 'Optional. Each player brings one wrapped gift worth about $20. Draw a number, then unwrap a new gift or steal one that is already open.', 'Bastard Santa rules'],
+    ['santa', '', 'Bastard Santa rules. Blank uses the built-in wording'],
     ['address', '', 'PRIVATE: only shown to people after they RSVP yes/maybe'],
     ['parking', '', ''],
     ['notes', '', 'Good to know: pool, pets, kids, etc. One per line'],
@@ -42,12 +42,13 @@ function setup() {
   s.getRange('A:D').setNumberFormat('@'); s.getRange('F:G').setNumberFormat('@');
 
   const sm = mk('Summary', ['', 'count']);
-  if (sm.getLastRow() === 1) sm.getRange(2, 1, 6, 2).setValues([
+  if (sm.getLastRow() === 1) sm.getRange(2, 1, 7, 2).setValues([
     ['Adults (yes)', '=SUMIF(Guests!C:C,"yes",Guests!D:D)'],
     ['Kids (yes)', '=SUMIF(Guests!C:C,"yes",Guests!E:E)'],
     ['People (maybe)', '=SUMIF(Guests!C:C,"maybe",Guests!D:D)+SUMIF(Guests!C:C,"maybe",Guests!E:E)'],
     ["Households that can't come", '=COUNTIF(Guests!C:C,"no")'],
-    ['Bastard Santa players', '=SUMIF(Guests!C:C,"yes",Guests!P:P)+SUMIF(Guests!C:C,"maybe",Guests!P:P)'],
+    ['Dogs (yes)', '=SUMIF(Guests!C:C,"yes",Guests!F:F)'],
+    ['Bastard Santa players', '=SUMIF(Guests!C:C,"yes",Guests!R:R)+SUMIF(Guests!C:C,"maybe",Guests!R:R)'],
     ['Replies', '=COUNTA(Guests!B2:B)'],
   ]);
   const blank = ss.getSheetByName('Sheet1'); if (blank && blank.getLastRow() === 0) ss.deleteSheet(blank);
@@ -122,7 +123,7 @@ function vote(token, b) {
 /** Everything the page may show. Phone, email, notes and dietary detail never leave the sheet. */
 function state(token) {
   const settings = {}; let address = '';
-  rows('Settings').forEach(r => { const k = String(r.key).trim(); if (!k) return; if (PRIVATE_SETTINGS.indexOf(k) >= 0) address = String(r.value); else settings[k] = String(r.value); });
+  rows('Settings').forEach(r => { const k = String(r.key).trim(); if (!k || String(r.value) === '') return; if (PRIVATE_SETTINGS.indexOf(k) >= 0) address = String(r.value); else settings[k] = String(r.value); });
   const all = rows('Guests').filter(g => g.name);
   const mine = all.filter(g => g.token === token)[0] || null;
   const tally = k => { const t = {}; all.filter(g => g.coming !== 'no').forEach(g => String(g[k] || '').split(', ').filter(String).forEach(x => t[x] = (t[x] || 0) + 1)); return t; };
@@ -131,7 +132,7 @@ function state(token) {
     settings: settings,
     mine: mine,
     address: mine && mine.coming !== 'no' ? address : '',
-    guests: all.map(g => ({ name: g.name, coming: g.coming, adults: g.adults, kids: g.kids, arrive: g.arrive, leave: g.leave, bring_type: g.bring_type, bringing: g.bringing, santa: g.santa })),
+    guests: all.map(g => ({ name: g.name, coming: g.coming, adults: g.adults, kids: g.kids, dogs: g.dogs, arrive: g.arrive, leave: g.leave, bring_type: g.bring_type, bringing: g.bringing, santa: g.santa })),
     diets: tally('dietary'), drinks: tally('drinks'),
     songs: rows('Songs').filter(s => s.id).map(s => ({ id: s.id, title: s.title, artist: s.artist, by: s.added_by, votes: Number(s.votes) || 0, voted: String(s.voters || '').split(',').indexOf(token) >= 0 })),
   };
