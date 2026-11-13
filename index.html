@@ -127,8 +127,8 @@ footer{color:var(--muted);font-size:.85rem;padding-bottom:calc(30px + env(safe-a
 <main class="wrap">
   <section>
     <p class="eyebrow">The day</p>
-    <h2>Doors open 11am. By 11pm you're either gone or holding a mop.</h2>
-    <p class="lede" id="intro">Rock up when you like, bugger off when you like. Just tell us when, so we don't cook for forty and feed twelve.</p>
+    <h2>Doors open 11am. We're in bed by 9. Let yourselves out.</h2>
+    <p class="lede" id="intro">Rock up when you like, bugger off when you like. The hosts will be horizontal by 9pm. You're welcome to carry on till 11, but you're letting yourselves out, and anyone still standing is holding a mop. Tell us your times so we don't cook for forty and feed twelve.</p>
     <div>
       <div class="rail" id="rail" aria-hidden="true"></div>
       <div class="rail-x" id="railx" aria-hidden="true"></div>
@@ -187,21 +187,21 @@ footer{color:var(--muted);font-size:.85rem;padding-bottom:calc(30px + env(safe-a
         <div class="row three">
           <div><label class="l" for="adults">Adults</label><input type="number" id="adults" min="0" max="20" value="1" inputmode="numeric"></div>
           <div><label class="l" for="kids">Kids</label><input type="number" id="kids" min="0" max="20" value="0" inputmode="numeric"></div>
-          <div><label class="l" for="dogs">Dogs</label><input type="number" id="dogs" min="0" max="20" value="0" inputmode="numeric"></div>
+          <div><label class="l" for="dogs">Four-legged</label><input type="number" id="dogs" min="0" max="20" value="0" inputmode="numeric"></div>
         </div>
-        <p class="hint">"Adult" is used loosely. Dogs are welcome and will be judged less than you.</p>
+        <p class="hint">"Adult" is used loosely. Bringing a four-legged friend? Count them here. They will be judged less than you.</p>
         <div><label class="l" for="who">Full names of every human coming</label><textarea id="who" maxlength="300" placeholder="First and last name, one per line. Yes, including you."></textarea></div>
-        <div id="dogBox" hidden><label class="l" for="dog_names">Dog names</label><input type="text" id="dog_names" maxlength="120" placeholder="Essential information"></div>
+        <div id="dogBox" hidden><label class="l" for="dog_names">Names of the four-legged friends</label><input type="text" id="dog_names" maxlength="120" placeholder="Essential information"></div>
         <div class="row">
           <div><label class="l" for="arrive">Rocking up</label><select id="arrive"></select></div>
           <div><label class="l" for="leave">Buggering off</label><select id="leave"></select></div>
         </div>
         <fieldset><legend>What are you bringing?</legend>
           <select id="bring_type" aria-label="Type of dish">
-            <option value="">Choose a type</option><option>Nibbles / starters</option><option>Meat / seafood</option><option>Salad / side</option><option>Dessert</option><option>Drinks / ice</option><option>Something else</option><option>Tell me what's needed</option>
+            <option value="">Choose a type</option><option>Nibbles / starters</option><option>Meat / seafood</option><option>Salad / side</option><option>Dessert</option><option>Drinks / ice</option><option>Something else</option><option>No idea yet</option><option>Tell me what's needed</option>
           </select>
-          <input type="text" id="bringing" maxlength="200" placeholder="e.g. prawns, pavlova, potato bake" aria-label="What you are bringing">
-          <p class="hint">Check the list below first. Six potato salads is a cry for help.</p>
+          <input type="text" id="bringing" maxlength="200" placeholder="e.g. prawns, pavlova, potato bake. Or leave blank." aria-label="What you are bringing">
+          <p class="hint">Check the list below first. Six potato salads is a cry for help. Don't know yet? Pick "No idea yet" and come back later.</p>
         </fieldset>
         <fieldset><legend>What's your poison?</legend>
           <div class="checks" id="drinks"></div>
@@ -337,7 +337,7 @@ function render(st) {
   const days = Math.ceil((new Date(s.date + 'T00:00:00') - new Date()) / 864e5);
   if (days > 0) chips.append(el('span', { className:'chip', textContent:days + (days === 1 ? ' sleep to go' : ' sleeps to go') }));
   if (s.rsvp_by) chips.append(el('span', { className:'chip', textContent:'RSVP by ' + fmtDate(s.rsvp_by, { weekday:'short', day:'numeric', month:'short' }) }));
-  chips.append(el('span', { className:'chip', textContent:'Bastard Santa $20' }), el('span', { className:'chip', textContent:'Dogs welcome' }));
+  chips.append(el('span', { className:'chip', textContent:'Bastard Santa $20' }), el('span', { className:'chip', textContent:'In bed by 9' }), el('span', { className:'chip', textContent:'Dogs welcome' }));
   $('#foot').textContent = 'Bevson Christmas ' + (s.date || '').slice(0, 4) + '. Replies go straight to ' + (s.hosts || 'the hosts') + '.';
 
   const yes = st.guests.filter(g => g.coming === 'yes'), maybe = st.guests.filter(g => g.coming === 'maybe');
@@ -345,7 +345,7 @@ function render(st) {
   const tot = $('#totals'); tot.replaceChildren(
     el('div', null, el('b', { textContent:n(yes, 'adults') }), 'adults'),
     el('div', null, el('b', { textContent:n(yes, 'kids') }), 'kids'),
-    el('div', null, el('b', { textContent:n(yes, 'dogs') }), 'dogs'),
+    el('div', null, el('b', { textContent:n(yes, 'dogs') }), 'four-legged'),
     el('div', null, el('b', { textContent:n(maybe, 'adults') + n(maybe, 'kids') }), 'on the fence'));
   const santaN = n(yes.concat(maybe), 'santa');
   $('#santaCount').textContent = santaN ? santaN + (santaN === 1 ? ' bastard' : ' bastards') + ' in so far.' : '';
@@ -399,7 +399,7 @@ checks('drinks', DRINKS); checks('dietary', DIETS);
 for (let h = 11; h <= 20; h++) $('#arrive').append(el('option', { value:h + ':00', textContent:hourLabel(h) }));
 $('#leave').append(el('option', { value:'', textContent:'When I get kicked out' }));
 for (let h = 13; h <= 22; h++) $('#leave').append(el('option', { value:h + ':00', textContent:hourLabel(h) }));
-$('#leave').append(el('option', { value:'23:00', textContent:'11pm. Hand me the mop.' }));
+$('#leave').append(el('option', { value:'23:00', textContent:'11pm. I will lock up and mop.' }));
 
 const coming = () => document.querySelector('input[name=coming]:checked').value;
 const syncComing = () => { $('#details').hidden = coming() === 'no'; $('#details').style.display = coming() === 'no' ? 'none' : 'contents'; };
