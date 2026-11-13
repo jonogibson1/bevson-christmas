@@ -67,6 +67,7 @@ section{display:flex;flex-direction:column;gap:14px}
 
 .totals{display:flex;flex-wrap:wrap;gap:6px 22px;font-family:var(--display)}
 .totals div{display:flex;align-items:baseline;gap:6px}
+.totals .grand{flex-basis:100%}.totals .grand b{font-size:3rem;color:var(--red)}
 .totals b{font-size:1.9rem;font-weight:800;font-variant-numeric:tabular-nums}
 .list{list-style:none;margin:0;padding:0;border-top:1px solid var(--line)}
 .list li{display:flex;gap:10px;justify-content:space-between;align-items:baseline;padding:10px 0;border-bottom:1px solid var(--line)}
@@ -337,16 +338,18 @@ function render(st) {
   $('#hostsLine').textContent = s.hosts ? 'Hosted by ' + s.hosts + '. Send help.' : "You're invited";
   const dl = fmtDate(s.date, { weekday:'long', day:'numeric', month:'long', year:'numeric' });
   $('#whenLine').textContent = (dl ? dl + ' · ' : '') + '11am till 11pm';
+  const yes = st.guests.filter(g => g.coming === 'yes'), maybe = st.guests.filter(g => g.coming === 'maybe');
+  const n = (arr, k) => arr.reduce((a, g) => a + (+g[k] || 0), 0);
   const chips = $('#chips'); chips.replaceChildren();
   const days = Math.ceil((new Date(s.date + 'T00:00:00') - new Date()) / 864e5);
   if (days > 0) chips.append(el('span', { className:'chip', textContent:days + (days === 1 ? ' sleep to go' : ' sleeps to go') }));
   if (s.rsvp_by) chips.append(el('span', { className:'chip', textContent:'RSVP by ' + fmtDate(s.rsvp_by, { weekday:'short', day:'numeric', month:'short' }) }));
+  chips.append(el('span', { className:'chip', textContent:(n(yes, 'adults') + n(yes, 'kids')) + ' coming so far' }));
   chips.append(el('span', { className:'chip', textContent:'Bastard Santa $20' }), el('span', { className:'chip', textContent:'In bed by 9' }), el('span', { className:'chip', textContent:'Dogs welcome' }));
   $('#foot').textContent = 'Bevson Christmas ' + (s.date || '').slice(0, 4) + '. Replies go straight to ' + (s.hosts || 'the hosts') + '.';
 
-  const yes = st.guests.filter(g => g.coming === 'yes'), maybe = st.guests.filter(g => g.coming === 'maybe');
-  const n = (arr, k) => arr.reduce((a, g) => a + (+g[k] || 0), 0);
   const tot = $('#totals'); tot.replaceChildren(
+    el('div', { className:'grand' }, el('b', { textContent:n(yes, 'adults') + n(yes, 'kids') }), 'total people so far'),
     el('div', null, el('b', { textContent:n(yes, 'adults') }), 'adults'),
     el('div', null, el('b', { textContent:n(yes, 'kids') }), 'kids'),
     el('div', null, el('b', { textContent:n(yes, 'dogs') }), 'four-legged'),
