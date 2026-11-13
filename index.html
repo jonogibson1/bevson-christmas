@@ -1,0 +1,464 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>Bevson Christmas</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230f3a30'/%3E%3Cpath d='M16 5l2.6 7.4H26l-6 4.6 2.3 7.5L16 20l-6.3 4.5L12 17l-6-4.6h7.4z' fill='%23f4b942'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&display=swap">
+<style>
+/* Layout: one phone-width column. Green header band, then the day as a 11am-11pm rail, then form and live boards. */
+:root{
+  --bg:#f2f5ef; --surface:#ffffff; --ink:#12302a; --muted:#56706a; --line:#d5ded6;
+  --green:#0f3a30; --on-green:#f2f5ef; --red:#cf3527; --gold:#f4b942; --teal:#1b8683;
+  --tint:#e4ece4; --ok:#1c7a4d;
+  --display:"Bricolage Grotesque","Avenir Next","Segoe UI",sans-serif;
+  --body:"DM Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root{
+  --bg:#0b1f1a; --surface:#12302a; --ink:#e9f0ea; --muted:#9db3ac; --line:#27483f;
+  --green:#071612; --on-green:#e9f0ea; --red:#ff6a57; --gold:#f4b942; --teal:#4fc4bf;
+  --tint:#183a32; --ok:#5fd39a; color-scheme:dark;
+}}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.5 var(--body)}
+.wrap{max-width:680px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;margin:0;line-height:1.05}
+h2{font-size:1.6rem;font-weight:700}
+h3{font-size:1.05rem;font-weight:700}
+p{margin:0}
+a{color:var(--teal)}
+.eyebrow{font-size:.75rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+
+header{background:var(--green);color:var(--on-green);padding-top:env(safe-area-inset-top,0px)}
+header .wrap{padding-block:36px 30px;display:flex;flex-direction:column;gap:16px}
+header .eyebrow{color:var(--gold)}
+h1{font-size:clamp(3rem,15vw,5.2rem);font-weight:800;letter-spacing:-.03em}
+h1 span{color:var(--gold)}
+.when{font-family:var(--display);font-size:1.25rem;font-weight:500}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:1px solid color-mix(in srgb,var(--on-green) 35%,transparent);border-radius:999px;padding:4px 12px;font-size:.85rem}
+.btn{appearance:none;border:0;border-radius:10px;background:var(--red);color:#fff;font:700 1rem var(--body);padding:13px 20px;cursor:pointer;text-decoration:none;display:inline-block;text-align:center}
+.btn.ghost{background:transparent;color:var(--ink);border:1.5px solid var(--line)}
+.btn:disabled{opacity:.6;cursor:default}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+
+main{display:flex;flex-direction:column;gap:44px;padding-block:32px 60px}
+section{display:flex;flex-direction:column;gap:14px}
+.lede{color:var(--muted)}
+.banner{background:var(--gold);color:#2b2000;font-weight:500;font-size:.9rem;padding:8px 0;text-align:center}
+
+/* the 11-to-11 rail */
+.rail{display:grid;grid-template-columns:repeat(12,1fr);gap:3px;align-items:end;height:110px}
+.rail div{background:var(--teal);border-radius:3px 3px 0 0;min-height:3px;position:relative}
+.rail div b{position:absolute;top:-18px;left:0;right:0;text-align:center;font-size:.7rem;font-weight:700;color:var(--muted)}
+.rail-x{display:grid;grid-template-columns:repeat(12,1fr);gap:3px;font-size:.68rem;color:var(--muted);text-align:left;font-variant-numeric:tabular-nums}
+
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px 24px}
+.fact{display:flex;flex-direction:column;gap:4px;min-width:0}
+.fact ul{margin:0;padding-left:18px}
+.tbc{color:var(--muted);font-style:italic}
+.santa{background:var(--green);color:var(--on-green);border-radius:14px;padding:20px;display:flex;flex-direction:column;gap:8px}
+.santa h3{font-size:1.4rem}
+.santa .price{color:var(--gold)}
+
+.totals{display:flex;flex-wrap:wrap;gap:6px 22px;font-family:var(--display)}
+.totals div{display:flex;align-items:baseline;gap:6px}
+.totals b{font-size:1.9rem;font-weight:800;font-variant-numeric:tabular-nums}
+.list{list-style:none;margin:0;padding:0;border-top:1px solid var(--line)}
+.list li{display:flex;gap:10px;justify-content:space-between;align-items:baseline;padding:10px 0;border-bottom:1px solid var(--line)}
+.list li>span:first-child{min-width:0;overflow-wrap:anywhere}
+.list small{color:var(--muted);white-space:nowrap;font-variant-numeric:tabular-nums}
+.pill{font-size:.72rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;border-radius:999px;padding:2px 8px;background:var(--tint);color:var(--muted)}
+.pill.maybe{background:var(--gold);color:#2b2000}
+.tags{display:flex;flex-wrap:wrap;gap:6px}
+.tag{background:var(--tint);border-radius:8px;padding:4px 10px;font-size:.9rem}
+.tag b{font-variant-numeric:tabular-nums}
+.empty{color:var(--muted);padding:10px 0}
+
+form{display:flex;flex-direction:column;gap:18px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px}
+fieldset{border:0;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;min-width:0}
+legend,label.l{font-weight:700;padding:0;margin-bottom:2px;display:block}
+.hint{font-size:.85rem;color:var(--muted)}
+input[type=text],input[type=tel],input[type=email],input[type=number],select,textarea{
+  width:100%;font:inherit;color:var(--ink);background:var(--bg);border:1.5px solid var(--line);border-radius:9px;padding:11px 12px;min-height:46px}
+textarea{min-height:76px;resize:vertical}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.seg{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.seg label,.checks label{position:relative;cursor:pointer}
+.seg input,.checks input{position:absolute;opacity:0;inset:0;width:100%;height:100%;margin:0;cursor:pointer}
+.seg span{display:block;text-align:center;border:1.5px solid var(--line);border-radius:9px;padding:12px 6px;font-weight:700;background:var(--bg)}
+.seg input:checked+span{background:var(--green);color:var(--on-green);border-color:var(--green)}
+.seg input:focus-visible+span,.checks input:focus-visible+span{outline:3px solid var(--gold);outline-offset:2px}
+.checks{display:flex;flex-wrap:wrap;gap:8px}
+.checks span{display:block;border:1.5px solid var(--line);border-radius:999px;padding:7px 13px;background:var(--bg);font-size:.95rem}
+.checks input:checked+span{background:var(--teal);border-color:var(--teal);color:#fff}
+.hp{position:absolute;left:-9999px}
+.msg{font-weight:500}
+.msg.err{color:var(--red)}
+.done{background:var(--tint);border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:8px}
+.done h3{color:var(--ok)}
+.copy{display:flex;gap:8px}
+.copy input{flex:1;min-width:0;font-size:.85rem}
+
+.song{display:flex;gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line)}
+.song div{flex:1;min-width:0;overflow-wrap:anywhere}
+.song small{color:var(--muted);display:block}
+.vote{appearance:none;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);border-radius:10px;min-width:58px;padding:8px;font:700 1rem var(--body);cursor:pointer;font-variant-numeric:tabular-nums}
+.vote[aria-pressed=true]{background:var(--red);border-color:var(--red);color:#fff}
+.songform{display:grid;grid-template-columns:1fr 1fr auto;gap:8px;padding:0;border:0;background:none}
+footer{color:var(--muted);font-size:.85rem;padding-bottom:calc(30px + env(safe-area-inset-bottom,0px))}
+@media (max-width:520px){.songform{grid-template-columns:1fr}.row{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<div class="banner" id="demoBanner" hidden>Preview mode. Responses are saved on this device only.</div>
+<header><div class="wrap">
+  <p class="eyebrow" id="hostsLine">You're invited</p>
+  <h1>Bevson <span>Christmas</span></h1>
+  <p class="when" id="whenLine">11am till 11pm</p>
+  <div class="chips" id="chips"></div>
+  <div><a class="btn" href="#rsvp" id="heroBtn">RSVP</a></div>
+</div></header>
+
+<main class="wrap">
+  <section>
+    <p class="eyebrow">The day</p>
+    <h2>Doors open 11am. Out, or on the clean-up crew, by 11pm.</h2>
+    <p class="lede" id="intro">Come when it suits and leave when it suits. Tell us roughly when, so we know how many to feed and when.</p>
+    <div>
+      <div class="rail" id="rail" aria-hidden="true"></div>
+      <div class="rail-x" id="railx" aria-hidden="true"></div>
+    </div>
+    <p class="hint" id="railNote">People in the house each hour, from the RSVPs so far.</p>
+  </section>
+
+  <section>
+    <p class="eyebrow">Food and drink</p>
+    <h2>What we're putting on, and what to bring</h2>
+    <div class="facts">
+      <div class="fact"><h3>Food we provide</h3><div data-set="we_provide_food"></div></div>
+      <div class="fact"><h3>Drinks we provide</h3><div data-set="we_provide_drinks"></div></div>
+      <div class="fact"><h3>Please bring</h3><div data-set="please_bring"></div></div>
+      <div class="fact" id="neededFact"><h3>Still needed</h3><div data-set="still_needed"></div></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="santa">
+      <p class="eyebrow" style="color:var(--gold)">Gift game</p>
+      <h3>Bastard Santa <span class="price">$20</span></h3>
+      <div data-set="santa"></div>
+      <p id="santaCount" class="hint" style="color:inherit;opacity:.8"></p>
+    </div>
+  </section>
+
+  <section id="rsvp">
+    <p class="eyebrow">RSVP</p>
+    <h2 id="rsvpTitle">Are you coming?</h2>
+    <p class="lede" id="rsvpLede">One reply per household. You can come back and change it any time.</p>
+    <div class="done" id="done" hidden>
+      <h3 id="doneTitle">Saved</h3>
+      <p id="doneText"></p>
+      <p id="doneAddr" hidden></p>
+      <p class="hint">Your link, to change your reply from another phone or computer:</p>
+      <div class="copy"><input type="text" id="editLink" readonly aria-label="Your edit link"><button class="btn ghost" type="button" id="copyBtn">Copy</button></div>
+    </div>
+    <form id="f" novalidate>
+      <fieldset><legend>Coming?</legend>
+        <div class="seg">
+          <label><input type="radio" name="coming" value="yes" id="c_yes" checked><span>Yes</span></label>
+          <label><input type="radio" name="coming" value="maybe" id="c_maybe"><span>Maybe</span></label>
+          <label><input type="radio" name="coming" value="no" id="c_no"><span>Can't</span></label>
+        </div>
+      </fieldset>
+      <div><label class="l" for="name">Your name</label><input type="text" id="name" maxlength="60" autocomplete="name" required></div>
+      <div class="row">
+        <div><label class="l" for="phone">Mobile</label><input type="tel" id="phone" maxlength="20" autocomplete="tel" inputmode="tel" required></div>
+        <div><label class="l" for="email">Email</label><input type="email" id="email" maxlength="100" autocomplete="email"></div>
+      </div>
+      <p class="hint">Phone and email go to the hosts only. They are never shown on this page.</p>
+      <input class="hp" type="text" id="website" tabindex="-1" autocomplete="off" aria-hidden="true">
+
+      <div id="details" style="display:contents">
+        <div class="row">
+          <div><label class="l" for="adults">Adults</label><input type="number" id="adults" min="0" max="20" value="1" inputmode="numeric"></div>
+          <div><label class="l" for="kids">Kids</label><input type="number" id="kids" min="0" max="20" value="0" inputmode="numeric"></div>
+        </div>
+        <div><label class="l" for="who">Who's in your group?</label><input type="text" id="who" maxlength="200" placeholder="Names, so we can set places"></div>
+        <div class="row">
+          <div><label class="l" for="arrive">Arriving</label><select id="arrive"></select></div>
+          <div><label class="l" for="leave">Leaving</label><select id="leave"></select></div>
+        </div>
+        <fieldset><legend>What are you bringing?</legend>
+          <select id="bring_type" aria-label="Type of dish">
+            <option value="">Choose a type</option><option>Nibbles / starters</option><option>Meat / seafood</option><option>Salad / side</option><option>Dessert</option><option>Drinks / ice</option><option>Something else</option><option>Tell me what's needed</option>
+          </select>
+          <input type="text" id="bringing" maxlength="200" placeholder="e.g. prawns, pavlova, potato bake" aria-label="What you are bringing">
+          <p class="hint">Check the list below first so we don't end up with six potato salads.</p>
+        </fieldset>
+        <fieldset><legend>What will you be drinking?</legend>
+          <div class="checks" id="drinks"></div>
+          <input type="text" id="drinks_other" maxlength="120" placeholder="Anything specific" aria-label="Other drinks">
+        </fieldset>
+        <fieldset><legend>Dietaries</legend>
+          <div class="checks" id="dietary"></div>
+          <input type="text" id="dietary_detail" maxlength="300" placeholder="Who it applies to, allergies, anything else" aria-label="Dietary details">
+        </fieldset>
+        <div><label class="l" for="santa">Bastard Santa: how many of you are playing?</label>
+          <input type="number" id="santa" min="0" max="20" value="0" inputmode="numeric">
+          <p class="hint">Each player brings one wrapped gift worth about $20.</p></div>
+      </div>
+      <div><label class="l" for="notes">Anything else we should know?</label><textarea id="notes" maxlength="500"></textarea></div>
+      <p class="msg" id="msg" role="status"></p>
+      <button class="btn" type="submit" id="submitBtn">Send RSVP</button>
+    </form>
+  </section>
+
+  <section>
+    <p class="eyebrow">So far</p>
+    <h2>Who's coming</h2>
+    <div class="totals" id="totals"></div>
+    <ul class="list" id="guestList"></ul>
+  </section>
+
+  <section>
+    <p class="eyebrow">The table</p>
+    <h2>What's being brought</h2>
+    <ul class="list" id="foodList"></ul>
+    <h3>Dietaries to cook around</h3>
+    <div class="tags" id="dietTags"></div>
+    <h3>Drinks people want</h3>
+    <div class="tags" id="drinkTags"></div>
+  </section>
+
+  <section id="music">
+    <p class="eyebrow">Music</p>
+    <h2>Request a song, vote on the rest</h2>
+    <p class="lede">Most votes gets played first. <span data-set="playlist_url" data-link="Open the playlist"></span></p>
+    <form class="songform" id="sf" novalidate>
+      <input type="text" id="s_title" maxlength="80" placeholder="Song" aria-label="Song title" required>
+      <input type="text" id="s_artist" maxlength="80" placeholder="Artist" aria-label="Artist">
+      <button class="btn" type="submit" id="s_btn">Add</button>
+    </form>
+    <p class="msg" id="smsg" role="status"></p>
+    <div id="songList"></div>
+  </section>
+
+  <section>
+    <p class="eyebrow">Getting here</p>
+    <div class="facts">
+      <div class="fact"><h3>Address</h3><p id="addrLine" class="tbc">Shown after you RSVP.</p></div>
+      <div class="fact"><h3>Parking</h3><div data-set="parking"></div></div>
+      <div class="fact"><h3>Good to know</h3><div data-set="notes"></div></div>
+      <div class="fact"><h3>Questions</h3><div data-set="contact"></div></div>
+    </div>
+  </section>
+  <footer id="foot"></footer>
+</main>
+
+<script>
+/* Paste the Apps Script web-app URL here. Empty = preview mode (this device only). */
+const API_URL = '';
+
+const DEFAULTS = {
+  date:'2026-12-25', hosts:'Jono & Charlotte', rsvp_by:'',
+  intro:'', we_provide_food:'', we_provide_drinks:'', please_bring:'', still_needed:'',
+  santa:'Optional. Each player brings one wrapped gift worth about $20. Draw a number, then unwrap a new gift or steal one that is already open.',
+  parking:'', notes:'', contact:'', playlist_url:''
+};
+const DRINKS = ['Beer','White wine','Red wine','Bubbles','Cider','Spirits / cocktails','Non-alcoholic beer or wine','Soft drink / juice','Water'];
+const DIETS = ['Vegetarian','Vegan','Gluten free / coeliac','Dairy free','Nut allergy','Shellfish allergy','No pork','Halal'];
+const $ = s => document.querySelector(s);
+const el = (t, props, ...kids) => { const e = Object.assign(document.createElement(t), props || {}); kids.forEach(k => e.append(k)); return e; };
+const hourLabel = h => (h % 12 || 12) + (h < 12 ? 'am' : 'pm');
+
+let token = '';
+try {
+  const q = new URLSearchParams(location.search).get('t');
+  if (q && /^[\w-]{8,64}$/.test(q)) localStorage.setItem('bevson-token', q);
+  token = localStorage.getItem('bevson-token') || '';
+  if (!token) { token = crypto.randomUUID(); localStorage.setItem('bevson-token', token); }
+} catch (e) { token = token || (Date.now().toString(36) + Math.random().toString(36).slice(2, 12)); }
+
+/* ---------- backend ---------- */
+async function api(body) {
+  body.token = token;
+  if (!API_URL) return mock(body);
+  const r = await fetch(API_URL, { method:'POST', headers:{'Content-Type':'text/plain;charset=utf-8'}, body:JSON.stringify(body) });
+  if (!r.ok) throw new Error('Server returned ' + r.status);
+  const j = await r.json();
+  if (j.error) throw new Error(j.error);
+  return j;
+}
+/* Preview-mode stand-in for the Apps Script backend. Same shapes, localStorage only. */
+function mock(b) {
+  let d; try { d = JSON.parse(localStorage.getItem('bevson-demo')) || {}; } catch (e) { d = {}; }
+  d.guests = d.guests || {}; d.songs = d.songs || [];
+  const save = () => { try { localStorage.setItem('bevson-demo', JSON.stringify(d)); } catch (e) {} };
+  if (b.action === 'rsvp') { d.guests[b.token] = b.data; save(); }
+  if (b.action === 'song') { d.songs.push({ id:'s' + Date.now(), title:b.title, artist:b.artist, by:(d.guests[b.token] || {}).name || '', voters:[b.token] }); save(); }
+  if (b.action === 'vote') { const s = d.songs.find(x => x.id === b.id); if (s) { const i = s.voters.indexOf(b.token); i < 0 ? s.voters.push(b.token) : s.voters.splice(i, 1); save(); } }
+  const rows = Object.values(d.guests), tally = k => { const t = {}; rows.filter(g => g.coming !== 'no').forEach(g => String(g[k] || '').split(', ').filter(Boolean).forEach(x => t[x] = (t[x] || 0) + 1)); return t; };
+  return {
+    settings:{}, mine:d.guests[b.token] || null, address:'',
+    guests:rows.map(g => ({ name:g.name, coming:g.coming, adults:g.adults, kids:g.kids, arrive:g.arrive, leave:g.leave, bring_type:g.bring_type, bringing:g.bringing, santa:g.santa })),
+    diets:tally('dietary'), drinks:tally('drinks'),
+    songs:d.songs.map(s => ({ id:s.id, title:s.title, artist:s.artist, by:s.by, votes:s.voters.length, voted:s.voters.includes(b.token) }))
+  };
+}
+
+/* ---------- render ---------- */
+function setBlock(node, text) {
+  node.replaceChildren();
+  const lines = String(text || '').split('\n').map(s => s.trim()).filter(Boolean);
+  if (node.dataset.link) { if (lines[0] && /^https:\/\//.test(lines[0])) node.append(el('a', { href:lines[0], target:'_blank', rel:'noopener', textContent:node.dataset.link })); return; }
+  if (!lines.length) node.append(el('p', { className:'tbc', textContent:'Details to come.' }));
+  else if (lines.length === 1) node.append(el('p', { textContent:lines[0] }));
+  else node.append(el('ul', null, ...lines.map(l => el('li', { textContent:l }))));
+}
+function fmtDate(iso, opts) { const d = new Date(iso + 'T00:00:00'); return isNaN(d) ? '' : d.toLocaleDateString('en-AU', opts); }
+function render(st) {
+  const s = Object.assign({}, DEFAULTS, st.settings || {});
+  document.querySelectorAll('[data-set]').forEach(n => setBlock(n, s[n.dataset.set]));
+  $('#neededFact').hidden = !s.still_needed;
+  if (s.intro) $('#intro').textContent = s.intro;
+  $('#hostsLine').textContent = s.hosts ? 'Hosted by ' + s.hosts : "You're invited";
+  const dl = fmtDate(s.date, { weekday:'long', day:'numeric', month:'long', year:'numeric' });
+  $('#whenLine').textContent = (dl ? dl + ' · ' : '') + '11am till 11pm';
+  const chips = $('#chips'); chips.replaceChildren();
+  const days = Math.ceil((new Date(s.date + 'T00:00:00') - new Date()) / 864e5);
+  if (days > 0) chips.append(el('span', { className:'chip', textContent:days + (days === 1 ? ' sleep to go' : ' sleeps to go') }));
+  if (s.rsvp_by) chips.append(el('span', { className:'chip', textContent:'RSVP by ' + fmtDate(s.rsvp_by, { weekday:'short', day:'numeric', month:'short' }) }));
+  chips.append(el('span', { className:'chip', textContent:'Bastard Santa $20' }));
+  $('#foot').textContent = 'Bevson Christmas ' + (s.date || '').slice(0, 4) + '. Replies go straight to ' + (s.hosts || 'the hosts') + '.';
+
+  const yes = st.guests.filter(g => g.coming === 'yes'), maybe = st.guests.filter(g => g.coming === 'maybe');
+  const n = (arr, k) => arr.reduce((a, g) => a + (+g[k] || 0), 0);
+  const tot = $('#totals'); tot.replaceChildren(
+    el('div', null, el('b', { textContent:n(yes, 'adults') }), 'adults'),
+    el('div', null, el('b', { textContent:n(yes, 'kids') }), 'kids'),
+    el('div', null, el('b', { textContent:n(maybe, 'adults') + n(maybe, 'kids') }), 'maybe'));
+  const santaN = n(yes.concat(maybe), 'santa');
+  $('#santaCount').textContent = santaN ? santaN + ' playing so far.' : '';
+
+  // hourly headcount 11am-11pm
+  const rail = $('#rail'), rx = $('#railx'); rail.replaceChildren(); rx.replaceChildren();
+  const counts = []; for (let h = 11; h < 23; h++) counts.push(yes.reduce((a, g) => {
+    const from = parseInt(g.arrive) || 11, to = parseInt(g.leave) || 23;
+    return a + (from <= h && to > h ? (+g.adults || 0) + (+g.kids || 0) : 0); }, 0));
+  const max = Math.max(1, ...counts);
+  counts.forEach((c, i) => { rail.append(el('div', { style:'height:' + Math.max(3, c / max * 85) + '%' }, el('b', { textContent:c || '' }))); rx.append(el('span', { textContent:hourLabel(11 + i) })); });
+
+  const gl = $('#guestList'); gl.replaceChildren();
+  yes.concat(maybe).forEach(g => {
+    const size = (+g.adults || 0) + (+g.kids || 0);
+    const t = [g.arrive ? hourLabel(parseInt(g.arrive)) : '', g.leave ? hourLabel(parseInt(g.leave)) : ''].filter(Boolean).join(' to ');
+    const left = el('span', null, g.name + (size > 1 ? ' +' + (size - 1) : '') + ' ');
+    if (g.coming === 'maybe') left.append(el('span', { className:'pill maybe', textContent:'Maybe' }));
+    gl.append(el('li', null, left, el('small', { textContent:t })));
+  });
+  if (!gl.children.length) gl.append(el('li', { className:'empty', textContent:'No replies yet. Be the first.' }));
+
+  const fl = $('#foodList'); fl.replaceChildren();
+  yes.concat(maybe).filter(g => g.bringing || g.bring_type).forEach(g =>
+    fl.append(el('li', null, el('span', null, (g.bringing || g.bring_type) + ' ', g.bringing && g.bring_type ? el('span', { className:'pill', textContent:g.bring_type }) : ''), el('small', { textContent:g.name }))));
+  if (!fl.children.length) fl.append(el('li', { className:'empty', textContent:'Nothing claimed yet.' }));
+
+  const tags = (node, obj, none) => { node.replaceChildren(); const ks = Object.keys(obj || {}).sort((a, b) => obj[b] - obj[a]);
+    ks.forEach(k => node.append(el('span', { className:'tag' }, k + ' ', el('b', { textContent:'×' + obj[k] }))));
+    if (!ks.length) node.append(el('span', { className:'empty', textContent:none })); };
+  tags($('#dietTags'), st.diets, 'None listed yet.');
+  tags($('#drinkTags'), st.drinks, 'No orders yet.');
+
+  const sl = $('#songList'); sl.replaceChildren();
+  st.songs.slice().sort((a, b) => b.votes - a.votes).forEach(s2 => {
+    const b = el('button', { className:'vote', type:'button', textContent:'▲ ' + s2.votes });
+    b.setAttribute('aria-pressed', s2.voted ? 'true' : 'false'); b.setAttribute('aria-label', 'Vote for ' + s2.title);
+    b.onclick = async () => { b.disabled = true; try { render(await api({ action:'vote', id:s2.id })); } catch (e) { b.disabled = false; $('#smsg').textContent = 'Vote did not save. Try again.'; } };
+    sl.append(el('div', { className:'song' }, el('div', null, s2.title, el('small', { textContent:[s2.artist, s2.by ? 'from ' + s2.by : ''].filter(Boolean).join(' · ') })), b));
+  });
+  if (!st.songs.length) sl.append(el('p', { className:'empty', textContent:'No requests yet.' }));
+
+  if (st.address) { $('#addrLine').textContent = st.address; $('#addrLine').className = ''; $('#doneAddr').textContent = 'Address: ' + st.address; $('#doneAddr').hidden = false; }
+  if (st.mine && !filled) fill(st.mine);
+}
+
+/* ---------- form ---------- */
+let filled = false;
+const checks = (id, items) => items.forEach((x, i) => $('#' + id).append(el('label', null, el('input', { type:'checkbox', value:x, id:id + '_' + i }), el('span', { textContent:x }))));
+checks('drinks', DRINKS); checks('dietary', DIETS);
+for (let h = 11; h <= 20; h++) $('#arrive').append(el('option', { value:h + ':00', textContent:hourLabel(h) }));
+$('#leave').append(el('option', { value:'', textContent:'Not sure yet' }));
+for (let h = 13; h <= 22; h++) $('#leave').append(el('option', { value:h + ':00', textContent:hourLabel(h) }));
+$('#leave').append(el('option', { value:'23:00', textContent:"11pm, I'm on clean-up" }));
+
+const coming = () => document.querySelector('input[name=coming]:checked').value;
+const syncComing = () => { $('#details').hidden = coming() === 'no'; $('#details').style.display = coming() === 'no' ? 'none' : 'contents'; };
+document.querySelectorAll('input[name=coming]').forEach(r => r.onchange = syncComing);
+const picked = id => [...document.querySelectorAll('#' + id + ' input:checked')].map(i => i.value);
+
+function fill(m) {
+  filled = true;
+  const r = $('#c_' + m.coming); if (r) r.checked = true;
+  ['name','phone','email','adults','kids','who','arrive','leave','bring_type','bringing','dietary_detail','santa','notes'].forEach(k => { if (m[k] != null && $('#' + k)) $('#' + k).value = m[k]; });
+  const setChecks = (id, list, str) => { const have = String(str || '').split(', ').filter(Boolean); document.querySelectorAll('#' + id + ' input').forEach(i => i.checked = have.includes(i.value)); return have.filter(x => !list.includes(x)).join(', '); };
+  $('#drinks_other').value = setChecks('drinks', DRINKS, m.drinks);
+  setChecks('dietary', DIETS, m.dietary);
+  syncComing();
+  $('#rsvpTitle').textContent = 'Your reply';
+  $('#rsvpLede').textContent = 'This is what we have for you. Change anything and save again.';
+  $('#submitBtn').textContent = 'Update RSVP'; $('#heroBtn').textContent = 'Change my RSVP';
+  showLink();
+}
+function showLink() { $('#editLink').value = location.origin + location.pathname + '?t=' + token; }
+$('#copyBtn').onclick = async () => { try { await navigator.clipboard.writeText($('#editLink').value); $('#copyBtn').textContent = 'Copied'; } catch (e) { $('#editLink').select(); } };
+
+$('#f').onsubmit = async e => {
+  e.preventDefault();
+  const msg = $('#msg'); msg.className = 'msg err';
+  const v = id => $('#' + id).value.trim();
+  if (!v('name')) { msg.textContent = 'Add your name.'; $('#name').focus(); return; }
+  if (v('phone').replace(/\D/g, '').length < 8) { msg.textContent = 'Add a mobile number so we can reach you on the day.'; $('#phone').focus(); return; }
+  if (v('email') && !/^\S+@\S+\.\S+$/.test(v('email'))) { msg.textContent = 'That email does not look right.'; $('#email').focus(); return; }
+  const c = coming(), going = c !== 'no';
+  if (going && (+v('adults') || 0) + (+v('kids') || 0) < 1) { msg.textContent = 'How many of you are coming?'; $('#adults').focus(); return; }
+  if (going && v('leave') && parseInt(v('leave')) <= parseInt(v('arrive'))) { msg.textContent = 'Leaving time is before arriving time.'; $('#leave').focus(); return; }
+  const data = { name:v('name'), coming:c, phone:v('phone'), email:v('email'), notes:v('notes'),
+    adults:going ? +v('adults') || 0 : 0, kids:going ? +v('kids') || 0 : 0, who:going ? v('who') : '',
+    arrive:going ? v('arrive') : '', leave:going ? v('leave') : '', bring_type:going ? v('bring_type') : '', bringing:going ? v('bringing') : '',
+    drinks:going ? picked('drinks').concat(v('drinks_other') ? [v('drinks_other').replace(/, /g, ' ')] : []).join(', ') : '',
+    dietary:going ? picked('dietary').join(', ') : '', dietary_detail:going ? v('dietary_detail') : '', santa:going ? +v('santa') || 0 : 0 };
+  const btn = $('#submitBtn'); btn.disabled = true; msg.className = 'msg'; msg.textContent = 'Saving…';
+  try {
+    filled = true;
+    render(await api({ action:'rsvp', data, website:$('#website').value }));
+    msg.textContent = '';
+    $('#doneTitle').textContent = c === 'yes' ? "You're in" : c === 'maybe' ? 'Pencilled in' : 'Sorry you can\'t make it';
+    $('#doneText').textContent = c === 'no' ? 'Thanks for letting us know.' : 'Saved. Come back any time to change times, food or numbers.';
+    $('#done').hidden = false; showLink(); btn.textContent = 'Update RSVP'; $('#heroBtn').textContent = 'Change my RSVP';
+    $('#done').scrollIntoView({ behavior:'smooth', block:'center' });
+  } catch (err) { msg.className = 'msg err'; msg.textContent = 'That did not save (' + err.message + '). Check your connection and try again.'; }
+  btn.disabled = false;
+};
+
+$('#sf').onsubmit = async e => {
+  e.preventDefault();
+  const t = $('#s_title').value.trim(), a = $('#s_artist').value.trim(), m = $('#smsg');
+  if (!t) { m.className = 'msg err'; m.textContent = 'Add a song title.'; return; }
+  $('#s_btn').disabled = true;
+  try { render(await api({ action:'song', title:t, artist:a })); $('#s_title').value = ''; $('#s_artist').value = ''; m.className = 'msg'; m.textContent = 'Added. You have voted for it.'; }
+  catch (err) { m.className = 'msg err'; m.textContent = 'That did not save (' + err.message + ').'; }
+  $('#s_btn').disabled = false;
+};
+
+/* ---------- boot ---------- */
+$('#demoBanner').hidden = !!API_URL;
+render({ settings:{}, guests:[], songs:[], diets:{}, drinks:{} });
+api({ action:'state' }).then(render).catch(() => { $('#railNote').textContent = 'Could not load the latest replies. Refresh to try again.'; });
+</script>
+</body>
+</html>
