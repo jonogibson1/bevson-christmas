@@ -210,6 +210,9 @@ footer{color:var(--muted);font-size:.85rem;padding-bottom:calc(30px + env(safe-a
             <option value="">Choose a type</option><option>Nibbles / starters</option><option>Meat / seafood</option><option>Salad / side</option><option>Dessert</option><option>Drinks / ice</option><option>Something else</option><option>No idea yet</option><option>Tell me what's needed</option>
           </select>
           <input type="text" id="bringing" maxlength="200" placeholder="e.g. prawns, pavlova, potato bake. Or leave blank." aria-label="What you are bringing">
+          <label class="l" for="cold_space" style="margin-top:8px">Need fridge or freezer space?</label>
+          <select id="cold_space"><option value="">No, it can sit on the bench</option><option>Fridge</option><option>Freezer</option><option>Fridge and freezer</option></select>
+          <p class="hint">Fridge space on Christmas Day is worth more than the house. Bring an esky for your drinks.</p>
           <p class="hint">Check the list below first. Six potato salads is a cry for help. Don't know yet? Pick "No idea yet" and come back later.</p>
         </fieldset>
         <fieldset><legend>What's your poison?</legend>
@@ -420,7 +423,7 @@ const picked = id => [...document.querySelectorAll('#' + id + ' input:checked')]
 function fill(m) {
   filled = true;
   const r = $('#c_' + m.coming); if (r) r.checked = true;
-  ['name','phone','email','adults','kids','dogs','dog_names','tunes','arrive','leave','bring_type','bringing','dietary_detail','santa','notes'].forEach(k => { if (m[k] != null && $('#' + k)) $('#' + k).value = m[k]; });
+  ['name','phone','email','adults','kids','dogs','dog_names','tunes','cold_space','arrive','leave','bring_type','bringing','dietary_detail','santa','notes'].forEach(k => { if (m[k] != null && $('#' + k)) $('#' + k).value = m[k]; });
   const setChecks = (id, list, str) => { const have = String(str || '').split(', ').filter(Boolean); document.querySelectorAll('#' + id + ' input').forEach(i => i.checked = have.includes(i.value)); return have.filter(x => !list.includes(x)).join(', '); };
   $('#drinks_other').value = setChecks('drinks', DRINKS, m.drinks);
   setChecks('dietary', DIETS, m.dietary);
@@ -446,7 +449,7 @@ $('#f').onsubmit = async e => {
   if (going && !$('#who').value.trim()) { msg.textContent = 'List the full name of every human coming. Including you.'; $('#who').focus(); return; }
   if (going && v('leave') && parseInt(v('leave')) <= parseInt(v('arrive'))) { msg.textContent = 'You are leaving before you arrive. Bold, but no.'; $('#leave').focus(); return; }
   const data = { name:v('name'), coming:c, phone:v('phone'), email:v('email'), notes:v('notes'),
-    adults:going ? +v('adults') || 0 : 0, kids:going ? +v('kids') || 0 : 0, dogs:going ? +v('dogs') || 0 : 0, who:going ? $('#who').value.trim().split(/\n+/).map(x => x.trim()).filter(Boolean).join('; ') : '', dog_names:going ? v('dog_names') : '', tunes:v('tunes'),
+    adults:going ? +v('adults') || 0 : 0, kids:going ? +v('kids') || 0 : 0, dogs:going ? +v('dogs') || 0 : 0, who:going ? $('#who').value.trim().split(/\n+/).map(x => x.trim()).filter(Boolean).join('; ') : '', dog_names:going ? v('dog_names') : '', cold_space:going ? v('cold_space') : '', tunes:v('tunes'),
     arrive:going ? v('arrive') : '', leave:going ? v('leave') : '', bring_type:going ? v('bring_type') : '', bringing:going ? v('bringing') : '',
     drinks:going ? picked('drinks').concat(v('drinks_other') ? [v('drinks_other').replace(/, /g, ' ')] : []).join(', ') : '',
     dietary:going ? picked('dietary').join(', ') : '', dietary_detail:going ? v('dietary_detail') : '', santa:going ? +v('santa') || 0 : 0 };

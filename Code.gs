@@ -3,7 +3,7 @@
  * 1. Run setup() once. 2. Deploy > New deployment > Web app, execute as Me, access Anyone.
  * Tabs: Settings (edit to change the site), Guests (replies), Songs, Summary.
  */
-const G = ['updated','name','coming','adults','kids','dogs','who','dog_names','phone','email','arrive','leave','bring_type','bringing','drinks','dietary','dietary_detail','santa','tunes','notes','token'];
+const G = ['updated','name','coming','adults','kids','dogs','who','dog_names','phone','email','arrive','leave','bring_type','bringing','drinks','dietary','dietary_detail','santa','tunes','notes','token','cold_space'];
 const NUM = { adults:1, kids:1, dogs:1, santa:1 };
 const MAXLEN = { name:60, who:300, dog_names:120, tunes:400, phone:20, email:100, bring_type:40, bringing:200, drinks:300, dietary:200, dietary_detail:300, notes:500 };
 const PRIVATE_SETTINGS = ['address'];
