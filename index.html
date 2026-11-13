@@ -134,6 +134,14 @@ footer{color:var(--muted);font-size:.85rem;padding-bottom:calc(30px + env(safe-a
       <div class="rail-x" id="railx" aria-hidden="true"></div>
     </div>
     <p class="hint" id="railNote">Bodies in the house, hour by hour. This is how we decide when to hide the good cheese.</p>
+    <h3>The run sheet</h3>
+    <ul class="list">
+      <li><span>Doors open. Snacks out. Grazing all day.</span><small>11am</small></li>
+      <li><span>Bastard Santa. Bring your $20 gift and your worst self.</span><small>1pm</small></li>
+      <li><span>The main feed comes out. Be here or eat leftovers.</span><small>2pm</small></li>
+      <li><span>Hosts go to bed. You let yourselves out.</span><small>9pm</small></li>
+      <li><span>Last one out locks up and mops.</span><small>11pm</small></li>
+    </ul>
   </section>
 
   <section>
@@ -152,6 +160,7 @@ footer{color:var(--muted);font-size:.85rem;padding-bottom:calc(30px + env(safe-a
       <p class="eyebrow" style="color:var(--gold)">Gift game</p>
       <h3>Bastard Santa. <span class="price">$20.</span> No mercy.</h3>
       <div data-set="santa"></div>
+      <p><b>Kicks off at 1pm sharp.</b> Late means you get whatever's left.</p>
       <p id="santaCount" class="hint" style="color:inherit;opacity:.8"></p>
     </div>
   </section>
@@ -213,7 +222,7 @@ footer{color:var(--muted);font-size:.85rem;padding-bottom:calc(30px + env(safe-a
         </fieldset>
         <div><label class="l" for="santa">Bastard Santa: how many of you are brave enough?</label>
           <input type="number" id="santa" min="0" max="20" value="0" inputmode="numeric">
-          <p class="hint">Each player brings one wrapped gift worth about $20.</p></div>
+          <p class="hint">Each player brings one wrapped gift worth about $20. Starts 1pm.</p></div>
         <div><label class="l" for="tunes">Tunes you demand</label><textarea id="tunes" maxlength="400" placeholder="Song and artist, as many as you like. We keep the list. We make no promises."></textarea></div>
       </div>
       <div><label class="l" for="notes">Anything else? Confessions, warnings, feuds to seat apart</label><textarea id="notes" maxlength="500"></textarea></div>
