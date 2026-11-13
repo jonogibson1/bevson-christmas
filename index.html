@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="robots" content="noindex,nofollow">
-<title>Bevson Christmas</title>
+<title>Christmas at the Bevsons</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230f3a30'/%3E%3Cpath d='M16 5l2.6 7.4H26l-6 4.6 2.3 7.5L16 20l-6.3 4.5L12 17l-6-4.6h7.4z' fill='%23f4b942'/%3E%3C/svg%3E">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&display=swap">
 <style>
@@ -109,6 +109,8 @@ textarea{min-height:76px;resize:vertical}
 .song div{flex:1;min-width:0;overflow-wrap:anywhere}
 .song small{color:var(--muted);display:block}
 .vote{appearance:none;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);border-radius:10px;min-width:58px;padding:8px;font:700 1rem var(--body);cursor:pointer;font-variant-numeric:tabular-nums}
+.pill.diet{background:var(--teal);color:#fff;margin-left:4px}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .pill.diet{color:#062b29}}
 .vote[aria-pressed=true]{background:var(--red);border-color:var(--red);color:#fff}
 .songform{display:grid;grid-template-columns:1fr 1fr auto;gap:8px;padding:0;border:0;background:none}
 footer{color:var(--muted);font-size:.85rem;padding-bottom:calc(30px + env(safe-area-inset-bottom,0px))}
@@ -119,7 +121,7 @@ footer{color:var(--muted);font-size:.85rem;padding-bottom:calc(30px + env(safe-a
 <div class="banner" id="demoBanner" hidden>Preview mode. Responses are saved on this device only.</div>
 <header><div class="wrap">
   <p class="eyebrow" id="hostsLine">You're invited</p>
-  <h1>Bevson <span>Christmas</span></h1>
+  <h1>Christmas <span>at the Bevsons</span></h1>
   <p class="when" id="whenLine">11am till 11pm</p>
   <div class="chips" id="chips"></div>
   <div><a class="btn" href="#rsvp" id="heroBtn">RSVP</a></div>
@@ -154,6 +156,18 @@ footer{color:var(--muted);font-size:.85rem;padding-bottom:calc(30px + env(safe-a
       <div class="fact"><h3>Your job</h3><div data-set="please_bring"></div></div>
       <div class="fact" id="neededFact"><h3>Gaps. Someone be a hero.</h3><div data-set="still_needed"></div></div>
     </div>
+  </section>
+
+  <section id="table">
+    <p class="eyebrow">The table</p>
+    <h2>Who's bringing what</h2>
+    <p class="lede">Check this before you pick a dish, so we don't end up with four fruit plates and no bread rolls. Dishes are tagged so people with dietaries can see what they can eat. Not sure yet? Reply with "No idea yet" and come back to change it any time.</p>
+    <ul class="list" id="foodList"></ul>
+    <p class="hint"><a href="#rsvp">Add or change your dish</a></p>
+    <h3>Dietaries in the house</h3>
+    <div class="tags" id="dietTags"></div>
+    <h3>The drinks order</h3>
+    <div class="tags" id="drinkTags"></div>
   </section>
 
   <section>
@@ -207,6 +221,11 @@ footer{color:var(--muted);font-size:.85rem;padding-bottom:calc(30px + env(safe-a
           <div><label class="l" for="arrive">Rocking up</label><select id="arrive"></select></div>
           <div><label class="l" for="leave">Buggering off</label><select id="leave"></select></div>
         </div>
+        <fieldset><legend>Dietaries and allergies</legend>
+          <p class="hint">Tick anything that applies to anyone in your group. We keep the details; the page only shows anonymous totals.</p>
+          <div class="checks" id="dietary"></div>
+          <input type="text" id="dietary_detail" maxlength="300" placeholder="Who, what, and how dead" aria-label="Dietary details">
+        </fieldset>
         <fieldset><legend>What are you bringing?</legend>
           <select id="bring_type" aria-label="Type of dish">
             <option value="">Choose a type</option><option>Nibbles / starters</option><option>Meat / seafood</option><option>Salad / side</option><option>Dessert</option><option>Drinks / ice</option><option>Something else</option><option>No idea yet</option><option>Tell me what's needed</option>
@@ -215,15 +234,13 @@ footer{color:var(--muted);font-size:.85rem;padding-bottom:calc(30px + env(safe-a
           <label class="l" for="cold_space" style="margin-top:8px">Need fridge or freezer space?</label>
           <select id="cold_space"><option value="">No, it can sit on the bench</option><option>Fridge</option><option>Freezer</option><option>Fridge and freezer</option></select>
           <p class="hint">Fridge space on Christmas Day is worth more than the house. Bring an esky for your drinks.</p>
-          <p class="hint">Check the list below first. Six potato salads is a cry for help. Don't know yet? Pick "No idea yet" and come back later.</p>
+          <div class="checks" id="dish_diet"></div>
+          <p class="hint">Tick what your dish is free of or suits, so people with dietaries know what to eat.</p>
+          <p class="hint">Check <a href="#table">the list</a> first. Six potato salads is a cry for help. Don't know yet? Pick "No idea yet" and come back later. Your edit link lets you change it from any device.</p>
         </fieldset>
         <fieldset><legend>What's your poison?</legend>
           <div class="checks" id="drinks"></div>
           <input type="text" id="drinks_other" maxlength="120" placeholder="Anything specific" aria-label="Other drinks">
-        </fieldset>
-        <fieldset><legend>Dietaries, allergies, things that will kill you</legend>
-          <div class="checks" id="dietary"></div>
-          <input type="text" id="dietary_detail" maxlength="300" placeholder="Who, what, and how dead" aria-label="Dietary details">
         </fieldset>
         <div><label class="l" for="santa">Bastard Santa: how many of you are brave enough?</label>
           <input type="number" id="santa" min="0" max="20" value="0" inputmode="numeric">
@@ -241,16 +258,6 @@ footer{color:var(--muted);font-size:.85rem;padding-bottom:calc(30px + env(safe-a
     <h2>The damage so far</h2>
     <div class="totals" id="totals"></div>
     <ul class="list" id="guestList"></ul>
-  </section>
-
-  <section>
-    <p class="eyebrow">The table</p>
-    <h2>What's hitting the table</h2>
-    <ul class="list" id="foodList"></ul>
-    <h3>Things that will hurt someone</h3>
-    <div class="tags" id="dietTags"></div>
-    <h3>The drinks order</h3>
-    <div class="tags" id="drinkTags"></div>
   </section>
 
   <section id="music">
@@ -335,7 +342,7 @@ function render(st) {
   document.querySelectorAll('[data-set]').forEach(n => setBlock(n, s[n.dataset.set]));
   $('#neededFact').hidden = !s.still_needed;
   if (s.intro) $('#intro').textContent = s.intro;
-  $('#hostsLine').textContent = s.hosts ? 'Hosted by ' + s.hosts + '. Send help.' : "You're invited";
+  $('#hostsLine').textContent = s.hosts ? 'Come and join ' + s.hosts + '. Bring snacks.' : "You're invited";
   const dl = fmtDate(s.date, { weekday:'long', day:'numeric', month:'long', year:'numeric' });
   $('#whenLine').textContent = (dl ? dl + ' · ' : '') + '11am till 11pm';
   const yes = st.guests.filter(g => g.coming === 'yes'), maybe = st.guests.filter(g => g.coming === 'maybe');
@@ -346,7 +353,7 @@ function render(st) {
   if (s.rsvp_by) chips.append(el('span', { className:'chip', textContent:'RSVP by ' + fmtDate(s.rsvp_by, { weekday:'short', day:'numeric', month:'short' }) }));
   chips.append(el('span', { className:'chip', textContent:(n(yes, 'adults') + n(yes, 'kids')) + ' coming so far' }));
   chips.append(el('span', { className:'chip', textContent:'Bastard Santa $20' }), el('span', { className:'chip', textContent:'In bed by 9' }), el('span', { className:'chip', textContent:'Dogs welcome' }));
-  $('#foot').textContent = 'Bevson Christmas ' + (s.date || '').slice(0, 4) + '. Replies go straight to ' + (s.hosts || 'the hosts') + '.';
+  $('#foot').textContent = 'Christmas at the Bevsons ' + (s.date || '').slice(0, 4) + '. Replies go straight to ' + (s.hosts || 'the hosts') + '.';
 
   const tot = $('#totals'); tot.replaceChildren(
     el('div', { className:'grand' }, el('b', { textContent:n(yes, 'adults') + n(yes, 'kids') }), 'total people so far'),
@@ -377,7 +384,7 @@ function render(st) {
 
   const fl = $('#foodList'); fl.replaceChildren();
   yes.concat(maybe).filter(g => g.bringing || g.bring_type).forEach(g =>
-    fl.append(el('li', null, el('span', null, (g.bringing || g.bring_type) + ' ', g.bringing && g.bring_type ? el('span', { className:'pill', textContent:g.bring_type }) : ''), el('small', { textContent:g.name }))));
+    { const dp = dishParse(g.bringing); fl.append(el('li', null, el('span', null, (dp.text || g.bring_type) + ' ', dp.text && g.bring_type ? el('span', { className:'pill', textContent:g.bring_type }) : '', ...dp.tags.map(t => el('span', { className:'pill diet', textContent:t }))), el('small', { textContent:g.name }))); });
   if (!fl.children.length) fl.append(el('li', { className:'empty', textContent:'Nothing claimed. We will all starve.' }));
 
   const tags = (node, obj, none) => { node.replaceChildren(); const ks = Object.keys(obj || {}).sort((a, b) => obj[b] - obj[a]);
@@ -403,6 +410,9 @@ function render(st) {
 let filled = false;
 const checks = (id, items) => items.forEach((x, i) => $('#' + id).append(el('label', null, el('input', { type:'checkbox', value:x, id:id + '_' + i }), el('span', { textContent:x }))));
 checks('drinks', DRINKS); checks('dietary', DIETS);
+const DISH = ['Vegetarian', 'Vegan', 'Gluten free', 'Dairy free', 'Nut free'];
+checks('dish_diet', DISH);
+const dishParse = str => { const m = String(str || '').match(/^(.*?)\s*\{([^}]*)\}\s*$/); return m ? { text:m[1], tags:m[2].split(',').map(x => x.trim()).filter(Boolean) } : { text:String(str || ''), tags:[] }; };
 for (let h = 11; h <= 20; h++) $('#arrive').append(el('option', { value:h + ':00', textContent:hourLabel(h) }));
 $('#leave').append(el('option', { value:'', textContent:'When I get kicked out' }));
 for (let h = 13; h <= 22; h++) $('#leave').append(el('option', { value:h + ':00', textContent:hourLabel(h) }));
@@ -422,11 +432,13 @@ function fill(m) {
   const setChecks = (id, list, str) => { const have = String(str || '').split(', ').filter(Boolean); document.querySelectorAll('#' + id + ' input').forEach(i => i.checked = have.includes(i.value)); return have.filter(x => !list.includes(x)).join(', '); };
   $('#drinks_other').value = setChecks('drinks', DRINKS, m.drinks);
   setChecks('dietary', DIETS, m.dietary);
+  const dp = dishParse(m.bringing); $('#bringing').value = dp.text;
+  document.querySelectorAll('#dish_diet input').forEach(i => i.checked = dp.tags.includes(i.value));
   $('#who').value = String(m.who || '').split('; ').join('\n');
   syncComing(); syncDogs();
   $('#rsvpTitle').textContent = 'Your reply';
   $('#rsvpLede').textContent = 'This is what we have for you. Change anything and save again.';
-  $('#submitBtn').textContent = 'Update RSVP'; $('#heroBtn').textContent = 'Change my RSVP';
+  $('#submitBtn').textContent = 'Update RSVP'; $('#heroBtn').textContent = "Change my RSVP or dish";
   showLink();
 }
 function showLink() { $('#editLink').value = location.origin + location.pathname + '?t=' + token; }
@@ -445,7 +457,7 @@ $('#f').onsubmit = async e => {
   if (going && v('leave') && parseInt(v('leave')) <= parseInt(v('arrive'))) { msg.textContent = 'You are leaving before you arrive. Bold, but no.'; $('#leave').focus(); return; }
   const data = { name:v('name'), coming:c, phone:v('phone'), email:v('email'), notes:v('notes'),
     adults:going ? +v('adults') || 0 : 0, kids:going ? +v('kids') || 0 : 0, dogs:going ? +v('dogs') || 0 : 0, who:going ? $('#who').value.trim().split(/\n+/).map(x => x.trim()).filter(Boolean).join('; ') : '', dog_names:going ? v('dog_names') : '', cold_space:going ? v('cold_space') : '', tunes:v('tunes'),
-    arrive:going ? v('arrive') : '', leave:going ? v('leave') : '', bring_type:going ? v('bring_type') : '', bringing:going ? v('bringing') : '',
+    arrive:going ? v('arrive') : '', leave:going ? v('leave') : '', bring_type:going ? v('bring_type') : '', bringing:going ? (v('bringing').replace(/[{}]/g, '') + (picked('dish_diet').length ? ' {' + picked('dish_diet').join(', ') + '}' : '')).trim() : '',
     drinks:going ? picked('drinks').concat(v('drinks_other') ? [v('drinks_other').replace(/, /g, ' ')] : []).join(', ') : '',
     dietary:going ? picked('dietary').join(', ') : '', dietary_detail:going ? v('dietary_detail') : '', santa:going ? +v('santa') || 0 : 0 };
   const btn = $('#submitBtn'); btn.disabled = true; msg.className = 'msg'; msg.textContent = 'Saving…';
@@ -454,7 +466,7 @@ $('#f').onsubmit = async e => {
     render(await api({ action:'rsvp', data, website:$('#website').value }));
     msg.textContent = '';
     $('#doneTitle').textContent = c === 'yes' ? "You're in. No backing out." : c === 'maybe' ? 'Pencilled in. Commit, coward.' : 'Your loss. More prawns for us.';
-    $('#doneText').textContent = c === 'no' ? 'Noted. You will be talked about.' : 'Saved. Come back any time to change times, food or numbers.';
+    $('#doneText').textContent = c === 'no' ? 'Noted. You will be talked about.' : 'Saved. Come back any time to change times, food or numbers. Keep your link below, it is how you get back to this.';
     $('#done').hidden = false; showLink(); btn.textContent = 'Update RSVP'; $('#heroBtn').textContent = 'Change my RSVP';
     $('#done').scrollIntoView({ behavior:'smooth', block:'center' });
   } catch (err) { msg.className = 'msg err'; msg.textContent = 'That did not save (' + err.message + '). Check your connection and try again.'; }
