@@ -217,7 +217,7 @@ footer{color:var(--muted);font-size:.85rem;padding-bottom:calc(30px + env(safe-a
           <div><label class="l" for="kids">Kids</label><input type="number" id="kids" min="0" max="20" value="0" inputmode="numeric"></div>
           <div><label class="l" for="dogs">Four-legged</label><input type="number" id="dogs" min="0" max="20" value="0" inputmode="numeric"></div>
         </div>
-        <p class="hint">Not sure of numbers yet? Put your best guess and update later. "Adult" is used loosely. Bringing a four-legged friend? Count them here. They will be judged less than you. Our dog Scruff will be there, and so will our cat Harry, probably in a crate, so keep dogs on their best behaviour.</p>
+        <p class="hint">Not sure of numbers yet? Put your best guess and update later. "Adult" is used loosely. Bringing a four-legged friend? Count them here. They will be judged less than you. Our cat Harry will be there, probably in a crate, so keep dogs on their best behaviour.</p>
         <div><label class="l" for="who">Full names of every human coming</label><textarea id="who" maxlength="300" placeholder="First and last name, one per line. Yes, including you."></textarea></div>
         <div id="dogBox" hidden><label class="l" for="dog_names">Names of the four-legged friends</label><input type="text" id="dog_names" maxlength="120" placeholder="Essential information"></div>
         <div class="row">
@@ -359,7 +359,7 @@ function render(st) {
   if (days > 0) chips.append(el('span', { className:'chip', textContent:days + (days === 1 ? ' sleep to go' : ' sleeps to go') }));
   if (s.rsvp_by) chips.append(el('span', { className:'chip', textContent:'RSVP by ' + fmtDate(s.rsvp_by, { weekday:'short', day:'numeric', month:'short' }) }));
   chips.append(el('span', { className:'chip', textContent:(n(yes, 'adults') + n(yes, 'kids')) + ' coming so far' }));
-  chips.append(el('span', { className:'chip', textContent:'Bastard Santa $20' }), el('span', { className:'chip', textContent:'In bed by 9' }), el('span', { className:'chip', textContent:'Dogs welcome' }), el('span', { className:'chip', textContent:'Scruff the dog + Harry the cat (crate)' }));
+  chips.append(el('span', { className:'chip', textContent:'Bastard Santa $20' }), el('span', { className:'chip', textContent:'In bed by 9' }), el('span', { className:'chip', textContent:'Dogs welcome' }), el('span', { className:'chip', textContent:'Harry the cat (in a crate)' }));
   $('#foot').textContent = 'Christmas at the Bevsons ' + (s.date || '').slice(0, 4) + '. Replies go straight to ' + (s.hosts || 'the hosts') + '.';
 
   const tot = $('#totals'); tot.replaceChildren(
