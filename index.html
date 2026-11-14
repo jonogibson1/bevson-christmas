@@ -167,6 +167,8 @@ footer{color:var(--muted);font-size:.85rem;padding-bottom:calc(30px + env(safe-a
     <p class="hint"><a href="#rsvp">Add or change your dish</a></p>
     <h3>Dietaries in the house</h3>
     <div class="tags" id="dietTags"></div>
+    <h3>If we need it: spare seats, esky space, ice</h3>
+    <div class="tags" id="extraTags"></div>
     <h3>The drinks order</h3>
     <div class="tags" id="drinkTags"></div>
   </section>
@@ -231,13 +233,17 @@ footer{color:var(--muted);font-size:.85rem;padding-bottom:calc(30px + env(safe-a
           <select id="bring_type" aria-label="Type of dish">
             <option value="">Choose a type</option><option>Nibbles / starters</option><option>Meat / seafood</option><option>Salad / side</option><option>Dessert</option><option>Drinks / ice</option><option>Something else</option><option>No idea yet</option><option>Tell me what's needed</option>
           </select>
-          <input type="text" id="bringing" maxlength="200" placeholder="e.g. prawns, pavlova, potato bake. Or leave blank." aria-label="What you are bringing">
+          <input type="text" id="bringing" maxlength="100" placeholder="e.g. prawns, pavlova, potato bake. Or leave blank." aria-label="What you are bringing">
           <label class="l" for="cold_space" style="margin-top:8px">Need fridge or freezer space?</label>
           <select id="cold_space"><option value="">No, it can sit on the bench</option><option>Not sure yet</option><option>Fridge</option><option>Freezer</option><option>Fridge and freezer</option></select>
           <p class="hint">Fridge space on Christmas Day is worth more than the house. Bring an esky for your drinks.</p>
           <div class="checks" id="dish_diet"></div>
           <p class="hint">Tick what your dish is free of or suits, so people with dietaries know what to eat.</p>
           <p class="hint">Check <a href="#table">the list</a> first. Six potato salads is a cry for help. Don't know yet? Pick "No idea yet" and come back later. Your edit link lets you change it from any device.</p>
+        </fieldset>
+        <fieldset><legend>If we need it, what else can you bring?</legend>
+          <div class="checks" id="extras"></div>
+          <p class="hint">Tick anything you can spare on the day. Spare seats, esky space and extra ice always run out. Not sure? Leave it and update later.</p>
         </fieldset>
         <fieldset><legend>What's your poison?</legend>
           <div class="checks" id="drinks"></div>
@@ -386,7 +392,7 @@ function render(st) {
   const fl = $('#foodList'); fl.replaceChildren();
   (s.host_dishes || 'Glazed ham | Jonathan\nSteak tartare | Jonathan\nFamily friendly dessert | Charlotte').split('\n').map(x => x.split('|').map(y => y.trim())).filter(x => x[0]).forEach(x =>
     fl.append(el('li', null, el('span', null, x[0] + ' ', el('span', { className:'pill', textContent:'Host' })), el('small', { textContent:x[1] || '' }))));
-  yes.concat(maybe).filter(g => g.bringing || g.bring_type).forEach(g =>
+  yes.concat(maybe).filter(g => dishParse(g.bringing).text || g.bring_type).forEach(g =>
     { const dp = dishParse(g.bringing); fl.append(el('li', null, el('span', null, (dp.text || g.bring_type) + ' ', dp.text && g.bring_type ? el('span', { className:'pill', textContent:g.bring_type }) : '', ...dp.tags.map(t => el('span', { className:'pill diet', textContent:t }))), el('small', { textContent:g.name }))); });
   if (fl.children.length <= 3) fl.append(el('li', { className:'empty', textContent:'Guests have claimed nothing yet. Get in before the fruit plates.' }));
 
@@ -395,6 +401,8 @@ function render(st) {
     if (!ks.length) node.append(el('span', { className:'empty', textContent:none })); };
   tags($('#dietTags'), st.diets, 'Nobody has admitted to anything yet.');
   tags($('#drinkTags'), st.drinks, 'Suspiciously sober so far.');
+  const ext = {}; yes.concat(maybe).forEach(g => dishParse(g.bringing).extras.forEach(x => ext[x] = (ext[x] || 0) + 1));
+  tags($('#extraTags'), ext, 'Nobody has offered a chair yet.');
 
   const sl = $('#songList'); sl.replaceChildren();
   st.songs.slice().sort((a, b) => b.votes - a.votes).forEach(s2 => {
@@ -415,7 +423,12 @@ const checks = (id, items) => items.forEach((x, i) => $('#' + id).append(el('lab
 checks('drinks', DRINKS); checks('dietary', DIETS);
 const DISH = ['Vegetarian', 'Vegan', 'Gluten free', 'Dairy free', 'Nut free'];
 checks('dish_diet', DISH);
-const dishParse = str => { const m = String(str || '').match(/^(.*?)\s*\{([^}]*)\}\s*$/); return m ? { text:m[1], tags:m[2].split(',').map(x => x.trim()).filter(Boolean) } : { text:String(str || ''), tags:[] }; };
+const EXTRAS = ['Spare seats', 'Esky space', 'Extra ice', 'Folding table'];
+checks('extras', EXTRAS);
+const dishParse = str => { let t = String(str || ''), ex = [], tags = [];
+  let m = t.match(/\s*\[([^\]]*)\]\s*$/); if (m) { ex = m[1].split(',').map(x => x.trim()).filter(Boolean); t = t.slice(0, m.index); }
+  m = t.match(/\s*\{([^}]*)\}\s*$/); if (m) { tags = m[1].split(',').map(x => x.trim()).filter(Boolean); t = t.slice(0, m.index); }
+  return { text:t.trim(), tags:tags, extras:ex }; };
 $('#arrive').append(el('option', { value:'', textContent:'Not sure yet. I will update later' }));
 for (let h = 11; h <= 20; h++) $('#arrive').append(el('option', { value:h + ':00', textContent:hourLabel(h) }));
 $('#leave').append(el('option', { value:'', textContent:'Not sure yet. I will update later' }));
@@ -438,6 +451,7 @@ function fill(m) {
   setChecks('dietary', DIETS, m.dietary);
   const dp = dishParse(m.bringing); $('#bringing').value = dp.text;
   document.querySelectorAll('#dish_diet input').forEach(i => i.checked = dp.tags.includes(i.value));
+  document.querySelectorAll('#extras input').forEach(i => i.checked = dp.extras.includes(i.value));
   $('#who').value = String(m.who || '').split('; ').join('\n');
   syncComing(); syncDogs();
   $('#rsvpTitle').textContent = 'Your reply';
@@ -461,7 +475,7 @@ $('#f').onsubmit = async e => {
   if (going && v('leave') && parseInt(v('leave')) <= parseInt(v('arrive'))) { msg.textContent = 'You are leaving before you arrive. Bold, but no.'; $('#leave').focus(); return; }
   const data = { name:v('name'), coming:c, phone:v('phone'), email:v('email'), notes:v('notes'),
     adults:going ? +v('adults') || 0 : 0, kids:going ? +v('kids') || 0 : 0, dogs:going ? +v('dogs') || 0 : 0, who:going ? $('#who').value.trim().split(/\n+/).map(x => x.trim()).filter(Boolean).join('; ') : '', dog_names:going ? v('dog_names') : '', cold_space:going ? v('cold_space') : '', tunes:v('tunes'),
-    arrive:going ? v('arrive') : '', leave:going ? v('leave') : '', bring_type:going ? v('bring_type') : '', bringing:going ? (v('bringing').replace(/[{}]/g, '') + (picked('dish_diet').length ? ' {' + picked('dish_diet').join(', ') + '}' : '')).trim() : '',
+    arrive:going ? v('arrive') : '', leave:going ? v('leave') : '', bring_type:going ? v('bring_type') : '', bringing:going ? (v('bringing').replace(/[{}\[\]]/g, '') + (picked('dish_diet').length ? ' {' + picked('dish_diet').join(', ') + '}' : '') + (picked('extras').length ? ' [' + picked('extras').join(', ') + ']' : '')).trim() : '',
     drinks:going ? picked('drinks').concat(v('drinks_other') ? [v('drinks_other').replace(/, /g, ' ')] : []).join(', ') : '',
     dietary:going ? picked('dietary').join(', ') : '', dietary_detail:going ? v('dietary_detail') : '', santa:going ? +v('santa') || 0 : 0 };
   const btn = $('#submitBtn'); btn.disabled = true; msg.className = 'msg'; msg.textContent = 'Saving…';
