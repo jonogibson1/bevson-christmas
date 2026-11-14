@@ -390,11 +390,11 @@ function render(st) {
   if (!gl.children.length) gl.append(el('li', { className:'empty', textContent:'Nobody yet. Be the first, you legend.' }));
 
   const fl = $('#foodList'); fl.replaceChildren();
-  (s.host_dishes || 'Glazed ham | Jonathan\nSteak tartare | Jonathan\nFamily friendly dessert | Charlotte').split('\n').map(x => x.split('|').map(y => y.trim())).filter(x => x[0]).forEach(x =>
+  (s.host_dishes || 'Glazed ham | Jonathan\nSteak tartare | Jonathan\nFamily friendly dessert | Charlotte\nLow level stress and a stash of valium upstairs | Jonathan').split('\n').map(x => x.split('|').map(y => y.trim())).filter(x => x[0]).forEach(x =>
     fl.append(el('li', null, el('span', null, x[0] + ' ', el('span', { className:'pill', textContent:'Host' })), el('small', { textContent:x[1] || '' }))));
   yes.concat(maybe).filter(g => dishParse(g.bringing).text || g.bring_type).forEach(g =>
     { const dp = dishParse(g.bringing); fl.append(el('li', null, el('span', null, (dp.text || g.bring_type) + ' ', dp.text && g.bring_type ? el('span', { className:'pill', textContent:g.bring_type }) : '', ...dp.tags.map(t => el('span', { className:'pill diet', textContent:t }))), el('small', { textContent:g.name }))); });
-  if (fl.children.length <= 3) fl.append(el('li', { className:'empty', textContent:'Guests have claimed nothing yet. Get in before the fruit plates.' }));
+  if (fl.children.length <= 4) fl.append(el('li', { className:'empty', textContent:'Guests have claimed nothing yet. Get in before the fruit plates.' }));
 
   const tags = (node, obj, none) => { node.replaceChildren(); const ks = Object.keys(obj || {}).filter(k => k !== 'Not sure yet').sort((a, b) => obj[b] - obj[a]);
     ks.forEach(k => node.append(el('span', { className:'tag' }, k + ' ', el('b', { textContent:'×' + obj[k] }))));
