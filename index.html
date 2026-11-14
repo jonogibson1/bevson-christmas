@@ -184,7 +184,7 @@ footer{color:var(--muted);font-size:.85rem;padding-bottom:calc(30px + env(safe-a
   <section id="rsvp">
     <p class="eyebrow">RSVP</p>
     <h2 id="rsvpTitle">Are you in or what?</h2>
-    <p class="lede" id="rsvpLede">Everyone is welcome, plus ones and less ones included. One reply per household. Change your mind as often as you like. We'll judge quietly.</p>
+    <p class="lede" id="rsvpLede">Everyone is welcome, plus ones and less ones included. Not sure about anything? Say so, then come back and update it (times, food, numbers, all of it). One reply per household. Change your mind as often as you like. We'll judge quietly.</p>
     <p class="msg" id="addrLine" hidden></p>
     <div class="done" id="done" hidden>
       <h3 id="doneTitle">Saved</h3>
@@ -215,7 +215,7 @@ footer{color:var(--muted);font-size:.85rem;padding-bottom:calc(30px + env(safe-a
           <div><label class="l" for="kids">Kids</label><input type="number" id="kids" min="0" max="20" value="0" inputmode="numeric"></div>
           <div><label class="l" for="dogs">Four-legged</label><input type="number" id="dogs" min="0" max="20" value="0" inputmode="numeric"></div>
         </div>
-        <p class="hint">"Adult" is used loosely. Bringing a four-legged friend? Count them here. They will be judged less than you. Our cat Harry will be there, probably in a crate, so keep dogs on their best behaviour.</p>
+        <p class="hint">Not sure of numbers yet? Put your best guess and update later. "Adult" is used loosely. Bringing a four-legged friend? Count them here. They will be judged less than you. Our cat Harry will be there, probably in a crate, so keep dogs on their best behaviour.</p>
         <div><label class="l" for="who">Full names of every human coming</label><textarea id="who" maxlength="300" placeholder="First and last name, one per line. Yes, including you."></textarea></div>
         <div id="dogBox" hidden><label class="l" for="dog_names">Names of the four-legged friends</label><input type="text" id="dog_names" maxlength="120" placeholder="Essential information"></div>
         <div class="row">
@@ -233,7 +233,7 @@ footer{color:var(--muted);font-size:.85rem;padding-bottom:calc(30px + env(safe-a
           </select>
           <input type="text" id="bringing" maxlength="200" placeholder="e.g. prawns, pavlova, potato bake. Or leave blank." aria-label="What you are bringing">
           <label class="l" for="cold_space" style="margin-top:8px">Need fridge or freezer space?</label>
-          <select id="cold_space"><option value="">No, it can sit on the bench</option><option>Fridge</option><option>Freezer</option><option>Fridge and freezer</option></select>
+          <select id="cold_space"><option value="">No, it can sit on the bench</option><option>Not sure yet</option><option>Fridge</option><option>Freezer</option><option>Fridge and freezer</option></select>
           <p class="hint">Fridge space on Christmas Day is worth more than the house. Bring an esky for your drinks.</p>
           <div class="checks" id="dish_diet"></div>
           <p class="hint">Tick what your dish is free of or suits, so people with dietaries know what to eat.</p>
@@ -245,7 +245,7 @@ footer{color:var(--muted);font-size:.85rem;padding-bottom:calc(30px + env(safe-a
         </fieldset>
         <div><label class="l" for="santa">Bastard Santa: how many of you are brave enough?</label>
           <input type="number" id="santa" min="0" max="20" value="0" inputmode="numeric">
-          <p class="hint">Each player brings one wrapped gift worth about $20. Starts 1pm.</p></div>
+          <p class="hint">Each player brings one wrapped gift worth about $20. Starts 1pm. Not sure? Leave it at 0 and update later.</p></div>
         <div><label class="l" for="tunes">Tunes you demand</label><textarea id="tunes" maxlength="400" placeholder="Song and artist, as many as you like. We keep the list. We make no promises."></textarea></div>
       </div>
       <div><label class="l" for="notes">Anything else? Confessions, warnings, feuds to seat apart</label><textarea id="notes" maxlength="500"></textarea></div>
@@ -287,8 +287,8 @@ const DEFAULTS = {
   santa:'Bring one wrapped gift worth about twenty bucks. Draw a number. Unwrap something new, or steal the thing someone else already loves.\nFriendships will be tested. Crying is permitted. Regifting the shit gift you got last year is welcome and encouraged.',
   parking:'', notes:'', contact:'', playlist_url:''
 };
-const DRINKS = ['Beer','White wine','Red wine','Bubbles','Cider','Spirits / cocktails','Non-alcoholic beer or wine','Soft drink / juice','Water'];
-const DIETS = ['Vegetarian','Vegan','Gluten free / coeliac','Dairy free','Nut allergy','Shellfish allergy','No pork','Halal'];
+const DRINKS = ['Beer','White wine','Red wine','Bubbles','Cider','Spirits / cocktails','Non-alcoholic beer or wine','Soft drink / juice','Water','Not sure yet'];
+const DIETS = ['Vegetarian','Vegan','Gluten free / coeliac','Dairy free','Nut allergy','Shellfish allergy','No pork','Halal','Not sure yet'];
 const $ = s => document.querySelector(s);
 const el = (t, props, ...kids) => { const e = Object.assign(document.createElement(t), props || {}); kids.forEach(k => e.append(k)); return e; };
 const hourLabel = h => (h % 12 || 12) + (h < 12 ? 'am' : 'pm');
@@ -367,7 +367,7 @@ function render(st) {
 
   // hourly headcount 11am-11pm
   const rail = $('#rail'), rx = $('#railx'); rail.replaceChildren(); rx.replaceChildren();
-  const counts = []; for (let h = 11; h < 23; h++) counts.push(yes.reduce((a, g) => {
+  const counts = []; for (let h = 11; h < 23; h++) counts.push(yes.filter(g => g.arrive).reduce((a, g) => {
     const from = parseInt(g.arrive) || 11, to = parseInt(g.leave) || 23;
     return a + (from <= h && to > h ? (+g.adults || 0) + (+g.kids || 0) : 0); }, 0));
   const max = Math.max(1, ...counts);
@@ -379,7 +379,7 @@ function render(st) {
     const t = [g.arrive ? hourLabel(parseInt(g.arrive)) : '', g.leave ? hourLabel(parseInt(g.leave)) : ''].filter(Boolean).join(' to ');
     const left = el('span', null, g.name + (size > 1 ? ' +' + (size - 1) : '') + ' ');
     if (g.coming === 'maybe') left.append(el('span', { className:'pill maybe', textContent:'Dunno' }));
-    gl.append(el('li', null, left, el('small', { textContent:t })));
+    gl.append(el('li', null, left, el('small', { textContent:t || 'Times TBC' })));
   });
   if (!gl.children.length) gl.append(el('li', { className:'empty', textContent:'Nobody yet. Be the first, you legend.' }));
 
@@ -388,7 +388,7 @@ function render(st) {
     { const dp = dishParse(g.bringing); fl.append(el('li', null, el('span', null, (dp.text || g.bring_type) + ' ', dp.text && g.bring_type ? el('span', { className:'pill', textContent:g.bring_type }) : '', ...dp.tags.map(t => el('span', { className:'pill diet', textContent:t }))), el('small', { textContent:g.name }))); });
   if (!fl.children.length) fl.append(el('li', { className:'empty', textContent:'Nothing claimed. We will all starve.' }));
 
-  const tags = (node, obj, none) => { node.replaceChildren(); const ks = Object.keys(obj || {}).sort((a, b) => obj[b] - obj[a]);
+  const tags = (node, obj, none) => { node.replaceChildren(); const ks = Object.keys(obj || {}).filter(k => k !== 'Not sure yet').sort((a, b) => obj[b] - obj[a]);
     ks.forEach(k => node.append(el('span', { className:'tag' }, k + ' ', el('b', { textContent:'×' + obj[k] }))));
     if (!ks.length) node.append(el('span', { className:'empty', textContent:none })); };
   tags($('#dietTags'), st.diets, 'Nobody has admitted to anything yet.');
@@ -414,10 +414,11 @@ checks('drinks', DRINKS); checks('dietary', DIETS);
 const DISH = ['Vegetarian', 'Vegan', 'Gluten free', 'Dairy free', 'Nut free'];
 checks('dish_diet', DISH);
 const dishParse = str => { const m = String(str || '').match(/^(.*?)\s*\{([^}]*)\}\s*$/); return m ? { text:m[1], tags:m[2].split(',').map(x => x.trim()).filter(Boolean) } : { text:String(str || ''), tags:[] }; };
+$('#arrive').append(el('option', { value:'', textContent:'Not sure yet. I will update later' }));
 for (let h = 11; h <= 20; h++) $('#arrive').append(el('option', { value:h + ':00', textContent:hourLabel(h) }));
-$('#leave').append(el('option', { value:'', textContent:'When I get kicked out' }));
+$('#leave').append(el('option', { value:'', textContent:'Not sure yet. I will update later' }));
 for (let h = 13; h <= 22; h++) $('#leave').append(el('option', { value:h + ':00', textContent:hourLabel(h) }));
-$('#leave').append(el('option', { value:'23:00', textContent:'11pm. I will lock up and mop.' }));
+$('#leave').append(el('option', { value:'23:00', textContent:'Late. Kick me out or I will lock up and mop.' }));
 
 const coming = () => document.querySelector('input[name=coming]:checked').value;
 const syncComing = () => { $('#details').hidden = coming() === 'no'; $('#details').style.display = coming() === 'no' ? 'none' : 'contents'; };
