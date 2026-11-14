@@ -120,7 +120,7 @@ function vote(token, b) {
   }
 }
 
-/** Everything the page may show. Phone, email, notes and dietary detail never leave the sheet. */
+/** Everything the page may show. Phone, email and dietary detail never leave the sheet. Notes are public comments. */
 function state(token) {
   const settings = {}; let address = '';
   rows('Settings').forEach(r => { const k = String(r.key).trim(); if (!k || String(r.value) === '') return; if (PRIVATE_SETTINGS.indexOf(k) >= 0) address = String(r.value); else settings[k] = String(r.value); });
@@ -132,7 +132,7 @@ function state(token) {
     settings: settings,
     mine: mine,
     address: mine && mine.coming !== 'no' ? address : '',
-    guests: all.map(g => ({ name: g.name, coming: g.coming, adults: g.adults, kids: g.kids, dogs: g.dogs, arrive: g.arrive, leave: g.leave, bring_type: g.bring_type, bringing: g.bringing, santa: g.santa })),
+    guests: all.map(g => ({ name: g.name, coming: g.coming, adults: g.adults, kids: g.kids, dogs: g.dogs, arrive: g.arrive, leave: g.leave, bring_type: g.bring_type, bringing: g.bringing, santa: g.santa, notes: g.notes })),
     diets: tally('dietary'), drinks: tally('drinks'),
     songs: rows('Songs').filter(s => s.id).map(s => ({ id: s.id, title: s.title, artist: s.artist, by: s.added_by, votes: Number(s.votes) || 0, voted: String(s.voters || '').split(',').indexOf(token) >= 0 })),
   };

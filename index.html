@@ -254,7 +254,7 @@ footer{color:var(--muted);font-size:.85rem;padding-bottom:calc(30px + env(safe-a
           <p class="hint">Each player brings one wrapped gift worth about $20. Starts 1pm. Not sure? Leave it at 0 and update later.</p></div>
         <div><label class="l" for="tunes">Tunes you demand</label><textarea id="tunes" maxlength="400" placeholder="Song and artist, as many as you like. We keep the list. We make no promises."></textarea></div>
       </div>
-      <div><label class="l" for="notes">Anything else? Confessions, warnings, feuds to seat apart</label><textarea id="notes" maxlength="500"></textarea></div>
+      <div><label class="l" for="notes">Comments</label><p class="hint">Shown on the page for everyone to read, with your name. Keep the private stuff for a text.</p><textarea id="notes" maxlength="500"></textarea></div>
       <p class="msg" id="msg" role="status"></p>
       <button class="btn" type="submit" id="submitBtn">Lock it in</button>
     </form>
@@ -280,10 +280,10 @@ footer{color:var(--muted);font-size:.85rem;padding-bottom:calc(30px + env(safe-a
     <div id="songList"></div>
   </section>
 
-  <section id="notes-sec">
-    <p class="eyebrow">Notes</p>
-    <h2>Good to know</h2>
-    <div data-set="notes"></div>
+  <section id="comments">
+    <p class="eyebrow">Comments</p>
+    <h2>What people are saying</h2>
+    <ul class="list" id="commentList"></ul>
   </section>
 
   <footer id="foot"></footer>
@@ -297,7 +297,7 @@ const DEFAULTS = {
   date:'2026-12-25', hosts:'Jono & Charlotte', rsvp_by:'',
   intro:'', we_provide_food:'', we_provide_drinks:'', please_bring:'', still_needed:'',
   santa:'Bring one wrapped gift worth about twenty bucks. Draw a number. Unwrap something new, or steal the thing someone else already loves.\nFriendships will be tested. Crying is permitted. Regifting the shit gift you got last year is welcome and encouraged.',
-  parking:'', notes:'Doors open 11am. Leave or clean up by 11pm. The hosts are in bed by 9, so let yourselves out.\nBYO. Bring a drink you like and a plate to share. We will have some wine, beer and Christmas cocktails.\nFridge and freezer space is limited, so tell us what you need in the RSVP and bring an esky.\nFour-legged friends are welcome. Harry the cat will be in a crate.\nNot sure of something yet? Reply with what you know and update it later using your edit link.\nRSVP by mid December.', contact:'', playlist_url:''
+  parking:'', notes:'', contact:'', playlist_url:''
 };
 const DRINKS = ['Beer','White wine','Red wine','Bubbles','Cider','Spirits / cocktails','Non-alcoholic beer or wine','Soft drink / juice','Water','Not sure yet'];
 const DIETS = ['Vegetarian','Vegan','Gluten free / coeliac','Dairy free','Nut allergy','Shellfish allergy','No pork','Halal','Not sure yet'];
@@ -334,7 +334,7 @@ function mock(b) {
   const rows = Object.values(d.guests), tally = k => { const t = {}; rows.filter(g => g.coming !== 'no').forEach(g => String(g[k] || '').split(', ').filter(Boolean).forEach(x => t[x] = (t[x] || 0) + 1)); return t; };
   return {
     settings:{}, mine:d.guests[b.token] || null, address:'',
-    guests:rows.map(g => ({ name:g.name, coming:g.coming, adults:g.adults, kids:g.kids, dogs:g.dogs, arrive:g.arrive, leave:g.leave, bring_type:g.bring_type, bringing:g.bringing, santa:g.santa })),
+    guests:rows.map(g => ({ name:g.name, coming:g.coming, adults:g.adults, kids:g.kids, dogs:g.dogs, arrive:g.arrive, leave:g.leave, bring_type:g.bring_type, bringing:g.bringing, santa:g.santa, notes:g.notes })),
     diets:tally('dietary'), drinks:tally('drinks'),
     songs:d.songs.map(s => ({ id:s.id, title:s.title, artist:s.artist, by:s.by, votes:s.voters.length, voted:s.voters.includes(b.token) }))
   };
@@ -384,6 +384,10 @@ function render(st) {
     return a + (from <= h && to > h ? (+g.adults || 0) + (+g.kids || 0) : 0); }, 0));
   const max = Math.max(1, ...counts);
   counts.forEach((c, i) => { rail.append(el('div', { style:'height:' + Math.max(3, c / max * 85) + '%' }, el('b', { textContent:c || '' }))); rx.append(el('span', { textContent:hourLabel(11 + i) })); });
+
+  const cl = $('#commentList'); cl.replaceChildren();
+  st.guests.filter(g => g.notes).forEach(g => cl.append(el('li', null, el('span', { textContent:g.notes }), el('small', { textContent:g.name }))));
+  if (!cl.children.length) cl.append(el('li', { className:'empty', textContent:'No comments yet. Say something nice. Or don\'t.' }));
 
   const gl = $('#guestList'); gl.replaceChildren();
   yes.concat(maybe).forEach(g => {
